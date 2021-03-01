@@ -52,13 +52,29 @@ export class ChordLyricsPair {
     return this._text !== null;
   }
 
-  public static parse(line: string): ChordLyricsPair[] {
-    const pairs: ChordLyricsPair[] = [];
+
+  public static parse(text:string): [boolean, ChordLyricsPair]{
+    const regex = /\[(?<value>.*?)\]/;
+    const match = text.match(regex);
+    if(!match || !match.groups){
+      return [true, new ChordLyricsPair(text)];
+    }
+    const chord = match.groups["value"];
+    const lyrics = text.substring(chord.length+2, text.length);
+    return this.createChordLyricsPair(lyrics, chord);
+  }
+
+  /**
+   * Parse the line and return an array of ChordLyricsPair with parsing success
+   * @param line The line to parse
+   */
+  public static parseLine(line: string): [boolean,ChordLyricsPair][] {
+    const pairs: [boolean, ChordLyricsPair][] = [];
     const regex = /\[(?<value>.*?)\]/g;
 
     // line without chords
     if (!regex.test(line)) {
-      pairs.push(new ChordLyricsPair(line));
+      pairs.push([true, new ChordLyricsPair(line)]);
       return pairs;
     }
 
@@ -90,16 +106,21 @@ export class ChordLyricsPair {
   private static createChordLyricsPair(
     lyrics: string,
     chord: string | null
-  ): ChordLyricsPair {
-    let mychord = null;
+  ): [boolean, ChordLyricsPair] {
+    let myChord = null;
     let text = null;
 
     if (chord?.startsWith("*")) {
       text = chord.substring(1, chord.length);
     } else {
-      mychord = chord ? Chord.parse(chord) : null;
+      myChord = chord ? Chord.parse(chord) : null;
     }
 
-    return new ChordLyricsPair(lyrics, mychord, text);
+    const pair = new ChordLyricsPair(lyrics, myChord, text);
+    const success = myChord !== undefined;
+    if(!success){
+      pair._text = chord;
+    }
+    return [success, pair];
   }
 }

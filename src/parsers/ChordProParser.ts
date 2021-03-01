@@ -35,7 +35,8 @@ export class ChordProParser {
 
   private readonly TAG_REGEX = /\{(?<value>.*)\}/;
   private readonly TAB_LINE_REGEX = /^[aA-zZ]\|[^ ]+$/;
-  private readonly CHORD_REGEX = /\[(?<value>.*?)\]/g;
+  private readonly CHORD_REGEX = /\[(.*?)\]/g;
+  private readonly SPLIT_CHORD_REGEX = /(?=\[.*?\])/g;
 
   /**
    * ChordProParser's constructor
@@ -106,9 +107,7 @@ export class ChordProParser {
   private parseTabLine(line: string) {
     if (this._currentSection instanceof Tabs) {
       if (!this.TAB_LINE_REGEX.test(line)) {
-        this.addWarning(
-          "This tabs line is invalid. It must starts with the string name and a pipe."
-        );
+        this.addWarning("This tabs line is invalid. It must starts with the string name and a pipe.");
       }
       this.addLine(new TabLine(line)); // should it add the line even if the tab line is invalid?
     } else {
@@ -125,16 +124,24 @@ export class ChordProParser {
       const lineWithoutChords = line.replace(this.CHORD_REGEX, "");
       const invalidCharsRegex = /[\[\]\{\}]/;
       if (invalidCharsRegex.test(lineWithoutChords)) {
-        this.addWarning(
-          "The lyrics line contains invalid characters or unclosed chords."
-        );
+        this.addWarning("The lyrics line contains invalid characters or unclosed chords.");
       }
 
-      const pairs = ChordLyricsPair.parse(line);
-      if (!pairs) {
-        this.addWarning("Cannot parse this lyrics line");
-        return;
-      }
+      const lineParts = line.split(this.SPLIT_CHORD_REGEX);
+      const pairs: ChordLyricsPair[] = [];
+      lineParts.forEach((part) => {
+        const result = ChordLyricsPair.parse(part);
+        if (!result[0]) {
+          const lyrics = result[1].lyrics.trim();
+          if (lyrics) {
+            this.addWarning(
+              `Cannot parse the chord '${result[1].text}' before the lyrics '${result[1].lyrics.trim()}'`
+            );
+          } else {
+            this.addWarning(`Cannot parse the chord '${result[1].text}'`);
+          }
+        }
+      });
       const lyricsLine = new LyricsLine(pairs);
       this.addLine(lyricsLine);
     } else {
@@ -231,9 +238,7 @@ export class ChordProParser {
   private parseStartOfBlockTag(longName: string, value: string | null) {
     // check previous section is closed
     if (this._currentSectionTagName !== null) {
-      this.addWarning(
-        `The section tag ${this._currentSectionTagName} must be closed before starting a new section`
-      );
+      this.addWarning(`The section tag ${this._currentSectionTagName} must be closed before starting a new section`);
     }
 
     this.completeCurrentSection();
@@ -274,13 +279,8 @@ export class ChordProParser {
       this.addWarning("This end of section tag is useless and will be ignore.");
       return;
     }
-    if (
-      name.replace("end_of_", "") !==
-      this._currentSectionTagName.replace("start_of_", "")
-    ) {
-      this.addWarning(
-        "The end of section tag does not match the start of section tag."
-      );
+    if (name.replace("end_of_", "") !== this._currentSectionTagName.replace("start_of_", "")) {
+      this.addWarning("The end of section tag does not match the start of section tag.");
     }
 
     this.completeCurrentSection();
@@ -390,9 +390,7 @@ export class ChordProParser {
     const regex = /^((?<time>[0-9]+)|(?<minutes>[0-5]?[0-9]):(?<seconds>[0-5][0-9]))$/;
     const match = value.match(regex);
     if (!match || !match.groups) {
-      this.addWarning(
-        "The duration metadata is invalid. Must be a number or a time (eg: 5:30)"
-      );
+      this.addWarning("The duration metadata is invalid. Must be a number or a time (eg: 5:30)");
       return;
     }
 
@@ -434,15 +432,8 @@ export class ChordProParser {
     const regex = /^(?<top>[0-9]{1,2})\/(?<bottom>[0-9]{1,2})$/;
     const match = value.match(regex);
 
-    if (
-      !match ||
-      !match.groups ||
-      !match.groups["top"] ||
-      !match.groups["bottom"]
-    ) {
-      this.addWarning(
-        "The time metadata is invalid. Must be number/number (eg: 6/8)"
-      );
+    if (!match || !match.groups || !match.groups["top"] || !match.groups["bottom"]) {
+      this.addWarning("The time metadata is invalid. Must be number/number (eg: 6/8)");
       return;
     }
 

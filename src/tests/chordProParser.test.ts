@@ -58,7 +58,7 @@ E|---------------|-------------
 {eot}
 
 {c:Verse 1}
-[Am]Who is like [Bb11]Him,
+[Hm]Who is like [Bb11]Him,
 The Lion and the [C#m]Lamb
 Seated on the [Gm]throne    [E7]
 [Am]Mountains bow [F]down

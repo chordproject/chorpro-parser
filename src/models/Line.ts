@@ -2,6 +2,8 @@ export enum LineType {
     Lyrics = "lyrics",
     Comment = "comment",
     Empty = "empty",
+    Custom = "custom",
+    Tabs = "tabs",
     Unknown = "unknown"
 }
 

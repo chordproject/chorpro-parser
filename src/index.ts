@@ -1,1 +1,1 @@
-export { ChordProParser } from "./parser/ChordProParser";
+export { ChordProParser } from "./parsers/ChordProParser";

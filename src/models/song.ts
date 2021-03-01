@@ -1,7 +1,7 @@
 import { Chord } from "./Chord";
 import { ChordDiagram } from "./ChordDiagram";
 import { Key } from "./Key";
-import { Section } from "./Section";
+import { Section } from "./sections/Section";
 
 export interface TimeSignature {
   topNumber: number;
@@ -23,29 +23,30 @@ export default class Song {
    * Album of the song
    * Multiple albums can be specified
    */
-  album: string[] = [];
+  albums: string[] = [];
 
   /**
    * Artist of the song
    * Multiple artists can be specified
    */
-  artist: string[] = [];
+  artists: string[] = [];
   
   /**
    * Composer of the song
    */
-  composer: string[] = [];
+  composers: string[] = [];
 
   /**
    * Arranger of the song.
    * Multiple arrangers can be specified
    */
-  arranger: string[] = [];
+  arrangers: string[] = [];
+  
   /**
    * Writer of the lyrics of the song.
    * Multiple lyricists can be specified
    */
-  lyricist: string[] = [];
+  lyricists: string[] = [];
 
   /**
    * Year of the first time the song was published
@@ -83,21 +84,14 @@ export default class Song {
   tempo: number | null = null;
 
   /**
+   * Custom metadatas
+   */
+  customMetadatas: [string, string | null][] = []
+
+  /**
    * User defined diagrams
    */
   userDiagrams: ChordDiagram[] = [];
-
-
-
-  /**
-   * List of unique chords in the song
-   */
-  uniqueChords: Chord[] = [];
-
-  /**
-   * Chord diagrams
-   */
-  diagrams: ChordDiagram[] = [];
 
   /**
    * Raw content of the song
@@ -105,13 +99,6 @@ export default class Song {
   rawContent: string = "";
 
   sections: Section[] = [];
-
-  /**
-   * Returns TRUE if the song as any chords
-   */
-  public hasChords(): boolean {
-    return this.uniqueChords && this.uniqueChords.length > 0;
-  }
 
   /**
    * Get the real key (without the capo)

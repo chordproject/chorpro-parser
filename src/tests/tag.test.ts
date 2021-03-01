@@ -1,4 +1,4 @@
-import { Tag, TagType } from "../parser/Tag";
+import { Tag, TagType } from "../parsers/Tag";
 
 test("parse custom tag", () => {
     const tag = Tag.parse(" x_test ");

@@ -1,8 +1,9 @@
-import { Chord } from "./chord";
-import { ChordDiagram } from "./chordDiagram";
-import { Key } from "./key";
+import { Chord } from "./Chord";
+import { ChordDiagram } from "./ChordDiagram";
+import { Key } from "./Key";
+import { Section } from "./Section";
 
-interface TimeSignature {
+export interface TimeSignature {
   topNumber: number;
   bottomNumber: number;
 }
@@ -22,30 +23,29 @@ export default class Song {
    * Album of the song
    * Multiple albums can be specified
    */
-  album: string[] | null = null;
+  album: string[] = [];
 
   /**
    * Artist of the song
    * Multiple artists can be specified
    */
-  artist: string[] | null = null;
+  artist: string[] = [];
   
   /**
    * Composer of the song
    */
-  composer: string | null = null;
+  composer: string[] = [];
 
   /**
    * Arranger of the song.
    * Multiple arrangers can be specified
    */
-  arranger: string[] | null = null;
-
+  arranger: string[] = [];
   /**
    * Writer of the lyrics of the song.
    * Multiple lyricists can be specified
    */
-  lyricist: string[] | null = null;
+  lyricist: string[] = [];
 
   /**
    * Year of the first time the song was published
@@ -65,7 +65,7 @@ export default class Song {
   /**
    * Capo setting for the song
    */
-  capo: number | null = null;
+  capo: number = 0;
 
   /**
    * Duration of the song (in seconds)
@@ -103,6 +103,8 @@ export default class Song {
    * Raw content of the song
    */
   rawContent: string = "";
+
+  sections: Section[] = [];
 
   /**
    * Returns TRUE if the song as any chords

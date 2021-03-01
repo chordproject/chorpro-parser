@@ -1,7 +1,7 @@
-import { Chord } from "../models/chord";
-import { ChordDiagram } from "../models/chordDiagram";
-import { Dot } from "../models/dot";
-import { MusicLetter, MusicNote } from "../models/musicNote";
+import { Chord } from "../models/Chord";
+import { ChordDiagram } from "../models/ChordDiagram";
+import { Dot } from "../models/Dot";
+import { MusicLetter, MusicNote } from "../models/MusicNote";
 
 test("has barre in 3rd", () => {
   const musicNote = new MusicNote(MusicLetter.C);

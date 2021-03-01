@@ -1,14 +1,39 @@
-import { ChordProParser } from "../parser/chordProParser";
+import { TimeSignature } from "../models/song";
+import { ChordProParser } from "../parser/ChordProParser";
 test("parse chordpro", () => {
   const cp = new ChordProParser();
-  cp.parse(sheet);
+  const song = cp.parse(sheet);
+  expect(song.album[0]).toEqual("Chordpro");
+  expect(song.arranger[0]).toEqual("Ben");
+  expect(song.artist[0]).toEqual("Paul Baloche");
+  expect(song.capo).toEqual(4);
+  expect(song.composer[0]).toEqual("Bill");
+  expect(song.copyright).toEqual("2014 Shitting Bull Inc.");
+  expect(song.duration).toEqual(4*60+32);
+  expect(song.key?.toString()).toEqual("Am");
+  expect(song.lyricist[0]).toEqual("John");
+  expect(song.tempo).toEqual(120);
+  expect(song.time).toEqual(<TimeSignature>{topNumber:6, bottomNumber:8});
+  expect(song.title).toEqual("Praise Adonai");
+  expect(song.subtitle).toEqual("ChordProject parser demo");
+  expect(song.year).toEqual(2000);
 });
 
 const sheet = `
 {title: Praise Adonai}
-{subtitle: ChordProject viewer demo}
+{subtitle: ChordProject parser demo}
 {artist: Paul Baloche}
+{album: Chordpro}
+{arranger: Ben}
+{composer: Bill}
+{lyricist: John}
+{copyright: 2014 Shitting Bull Inc.}
+{duration: 4:32}
+{tempo: 120}
+{time: 6/8}
+{year: 2000}
 {key: Am}
+{capo: 4}
 
 {sot}
 E|-----2---2-----|-------3-3---

@@ -1,4 +1,4 @@
-import { Dot } from "../models/dot";
+import { Dot } from "../models/Dot";
 
 test("get finger should return dot finger", () => {
     const expectedFinger = 1;

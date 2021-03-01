@@ -1,10 +1,10 @@
-import { Tag, TagType } from "../parser/tag";
+import { Tag, TagType } from "../parser/Tag";
 
 test("parse custom tag", () => {
     const tag = Tag.parse(" x_test ");
     const expectedType = TagType.Custom;
     const expectedName = "x_test";
-    const expectedValue = "";
+    const expectedValue = null;
     expect(tag).toBeDefined();
     expect(tag?.longName).toEqual(expectedName);
     expect(tag?.shortName).toEqual(expectedName);
@@ -42,7 +42,7 @@ test("parse end_of_chorus tag", () => {
     const expectedType = TagType.EndOfBlock;
     const expectedName = "end_of_chorus";
     const expectedShortName = "eoc";
-    const expectedValue = "";
+    const expectedValue = null;
     expect(tag).toBeDefined();
     expect(tag?.longName).toEqual(expectedName);
     expect(tag?.shortName).toEqual(expectedShortName);
@@ -55,7 +55,7 @@ test("parse eoc tag", () => {
     const expectedType = TagType.EndOfBlock;
     const expectedName = "end_of_chorus";
     const expectedShortName = "eoc";
-    const expectedValue = "";
+    const expectedValue = null;
     expect(tag).toBeDefined();
     expect(tag?.longName).toEqual(expectedName);
     expect(tag?.shortName).toEqual(expectedShortName);

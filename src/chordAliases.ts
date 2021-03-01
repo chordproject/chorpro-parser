@@ -1,4 +1,4 @@
-export abstract class ChordAliasHelper {
+export abstract class ChordAliases {
   // aliases for the chord keys
   public readonly keyAliases = new Map([
     ["A#", "Bb"],

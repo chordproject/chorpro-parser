@@ -1,4 +1,4 @@
-import { TagConstants } from "./tagConstants";
+import { TagConstants } from "./TagConstants";
 
 /**
  * List of
@@ -65,10 +65,10 @@ export class Tag {
   private static readonly CUSTOM_META_TAG_REGEX = /^(?<name>x_[^:]+)(:?\s*(?<value>.+))?$/;
 
   private _originalName: string = "";
-  private _value: string = "";
+  private _value: string | null = null;
   private _type: TagType = TagType.None;
 
-  public get value(): string {
+  public get value(): string | null {
     return this._value;
   }
 

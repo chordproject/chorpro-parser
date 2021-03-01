@@ -1,4 +1,4 @@
-import { MusicNote } from "./musicNote";
+import { MusicNote } from "./MusicNote";
 
 export class Chord {
   private _note: MusicNote;

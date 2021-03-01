@@ -6,6 +6,11 @@ export abstract class TagConstants {
   static readonly ALBUM = "album";
 
   /**
+   * Artist meta directive. See https://www.chordpro.org/chordpro/directives-arranger/
+   */
+  static readonly ARRANGER = "arranger";
+
+  /**
    * Artist meta directive. See https://www.chordpro.org/chordpro/directives-artist/
    */
   static readonly ARTIST = "artist";
@@ -126,6 +131,7 @@ export abstract class TagConstants {
 
   static readonly META_TAGS = [
     TagConstants.ALBUM,
+    TagConstants.ARRANGER,
     TagConstants.ARTIST,
     TagConstants.CAPO,
     TagConstants.COMPOSER,

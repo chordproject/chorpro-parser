@@ -1,5 +1,5 @@
-import { Chord } from "../models/chord";
-import { MusicAccidental, MusicLetter, MusicNote } from "../models/musicNote";
+import { Chord } from "../models/Chord";
+import { MusicAccidental, MusicLetter, MusicNote } from "../models/MusicNote";
 
 test.each`
   chord  | expected
@@ -77,21 +77,22 @@ test.each`
   }
 );
 
-describe("return the chord as text", () => {
-  it("simple chord", () => {
-    const note = new MusicNote(MusicLetter.A, MusicAccidental["#"]);
-    const chord = new Chord(note, "M7");
-    const chordString = chord.toString();
-    expect(chordString).toEqual("A#M7");
-  });
-  it("chord with bass", () => {
-    const note = new MusicNote(MusicLetter.G, MusicAccidental["b"]);
-    const bass = new MusicNote(MusicLetter.B, MusicAccidental["b"]);
-    const chord = new Chord(note, "m", bass);
-    const chordString = chord.toString();
-    expect(chordString).toEqual("Gbm/Bb");
-  });
-});
+test.each`
+  chord 
+  ${"A"}
+  ${"Am"}
+  ${"B#"}
+  ${"C/E"}
+  ${"Db/Ab"}
+  ${"Esus2"}
+  ${"Fsus2/C"}
+`(
+  "return the chord $chord as text",
+  ({ chord }) => {
+    const result = Chord.parse(chord)?.toString();
+    expect(result).toEqual(chord);
+  }
+);
 
 test("get music note return the music note", () => {
   const expectedNote = new MusicNote(MusicLetter.A, MusicAccidental.b);

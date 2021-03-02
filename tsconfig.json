@@ -9,7 +9,10 @@
 		"sourceMap": true,
 		"strictNullChecks": true,
 		"strict": true,
-		"allowJs": false
+		"allowJs": false,
+		"moduleResolution": "node",
+		"resolveJsonModule": true,
+		"module": "ESNext"
 	},
 	"include": ["./src/**/*"],
 	"exclude": ["node_modules", "**/*.spec.ts"]

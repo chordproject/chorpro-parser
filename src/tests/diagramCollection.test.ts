@@ -1,8 +1,8 @@
-import { ChordDefinitions } from "../ChordDefinitions";
+import { DiagramDefinitions } from "../DiagramCollection";
 import { Chord } from "../models/Chord";
 
 test("get chord diagram for chord A", () => {
-  const definitions = new ChordDefinitions();
+  const definitions = new DiagramDefinitions();
   const chord = Chord.parse("A");
   return definitions.get(chord!).then((diagrams) => {
     expect(diagrams).toBeDefined();
@@ -16,7 +16,7 @@ test("get chord diagram for chord A", () => {
 });
 
 test("get chord diagram for chord B#", () => {
-  const definitions = new ChordDefinitions();
+  const definitions = new DiagramDefinitions();
   const chord = Chord.parse("B#");
   return definitions.get(chord!).then((diagrams) => {
     expect(diagrams).toBeDefined();
@@ -30,7 +30,7 @@ test("get chord diagram for chord B#", () => {
 });
 
 test("get chord diagram for chord Gb", () => {
-  const definitions = new ChordDefinitions();
+  const definitions = new DiagramDefinitions();
   const chord = Chord.parse("Gb");
   return definitions.get(chord!).then((diagrams) => {
     expect(diagrams).toBeDefined();

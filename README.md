@@ -1,4 +1,4 @@
-# ChordProject Viewer
+# ChordProject Parser
 
 A TypeScript library for parsing ChordPro songs.
 

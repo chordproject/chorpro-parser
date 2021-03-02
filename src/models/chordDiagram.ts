@@ -1,5 +1,5 @@
-import { Chord } from "./chord";
-import { Dot } from "./dot";
+import { Chord } from "./Chord";
+import { Dot } from "./Dot";
 
 export class ChordDiagram {
   private readonly _chord: Chord;

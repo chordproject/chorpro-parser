@@ -9,6 +9,9 @@ export class MusicNote {
   }
 
   public toString(): string {
+    if(this._accidental === MusicAccidental.none){
+      return MusicLetter[this._letter];
+    }
     return MusicLetter[this._letter] + MusicAccidental[this._accidental];
   }
 

@@ -1,8 +1,9 @@
-import { Chord } from "./chord";
-import { ChordDiagram } from "./chordDiagram";
-import { Key } from "./key";
+import { Chord } from "./Chord";
+import { ChordDiagram } from "./ChordDiagram";
+import { Key } from "./Key";
+import { Section } from "./sections/Section";
 
-interface TimeSignature {
+export interface TimeSignature {
   topNumber: number;
   bottomNumber: number;
 }
@@ -22,30 +23,30 @@ export default class Song {
    * Album of the song
    * Multiple albums can be specified
    */
-  album: string[] | null = null;
+  albums: string[] = [];
 
   /**
    * Artist of the song
    * Multiple artists can be specified
    */
-  artist: string[] | null = null;
+  artists: string[] = [];
   
   /**
    * Composer of the song
    */
-  composer: string | null = null;
+  composers: string[] = [];
 
   /**
    * Arranger of the song.
    * Multiple arrangers can be specified
    */
-  arranger: string[] | null = null;
-
+  arrangers: string[] = [];
+  
   /**
    * Writer of the lyrics of the song.
    * Multiple lyricists can be specified
    */
-  lyricist: string[] | null = null;
+  lyricists: string[] = [];
 
   /**
    * Year of the first time the song was published
@@ -65,7 +66,7 @@ export default class Song {
   /**
    * Capo setting for the song
    */
-  capo: number | null = null;
+  capo: number = 0;
 
   /**
    * Duration of the song (in seconds)
@@ -83,33 +84,21 @@ export default class Song {
   tempo: number | null = null;
 
   /**
+   * Custom metadatas
+   */
+  customMetadatas: [string, string | null][] = []
+
+  /**
    * User defined diagrams
    */
   userDiagrams: ChordDiagram[] = [];
-
-
-
-  /**
-   * List of unique chords in the song
-   */
-  uniqueChords: Chord[] = [];
-
-  /**
-   * Chord diagrams
-   */
-  diagrams: ChordDiagram[] = [];
 
   /**
    * Raw content of the song
    */
   rawContent: string = "";
 
-  /**
-   * Returns TRUE if the song as any chords
-   */
-  public hasChords(): boolean {
-    return this.uniqueChords && this.uniqueChords.length > 0;
-  }
+  sections: Section[] = [];
 
   /**
    * Get the real key (without the capo)

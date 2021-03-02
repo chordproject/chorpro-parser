@@ -1,4 +1,4 @@
-import { ChordLyricsPair } from "../models/chordLyricsPair";
+import { ChordLyricsPair } from "../models/ChordLyricsPair";
 
 test("parse lyrics chord pairs", () => {
     const text = "I will not [D/F#]let a[G]nything [Cadd9]take away";

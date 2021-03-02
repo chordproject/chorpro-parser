@@ -15,7 +15,7 @@ import { TabLine } from '../models/TabLine';
 import { ParserWarning } from './parserWarning';
 import { Tag, TagType } from './tag';
 import { TagConstants } from './TagConstants';
-import Song from '../models/song';
+import Song from '../models/Song';
 
 export class ChordProParser {
 	private _currentSection: Section;
@@ -146,6 +146,7 @@ export class ChordProParser {
 						this.addWarning(`Cannot parse the chord '${result[1].text}'`);
 					}
 				}
+				pairs.push(result[1]);
 			});
 			const lyricsLine = new LyricsLine(pairs);
 			this.addLine(lyricsLine);

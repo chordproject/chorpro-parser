@@ -1,7 +1,7 @@
 import { Lyrics } from "../models/sections/Lyrics";
 import { LyricsType } from "../models/sections/LyricsBase";
 import { Tabs } from "../models/sections/Tabs";
-import { TimeSignature } from "../models/song";
+import { TimeSignature } from "../models/Song";
 import { ChordProParser } from "../parsers/ChordProParser";
 test("parse chordpro", () => {
   const cp = new ChordProParser();

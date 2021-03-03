@@ -1,5 +1,4 @@
 import { Chord } from "./Chord";
-import { Dot } from "./Dot";
 
 export class ChordDiagram {
   private readonly _chord: Chord;
@@ -33,6 +32,7 @@ export class ChordDiagram {
     this._fingers = fingers;
     this._variation = variation;
   }
+
   /**
    * Parse the user defined chord to a chord diagram. Always transform frets into absolute value
    * @param text User defined chord
@@ -72,20 +72,6 @@ export class ChordDiagram {
   }
 
   /**
-   * Get the dots
-   */
-  public get dots(): Dot[] {
-    var dots: Dot[] = [];
-    for (let index = 0; index < this._frets.length; index++) {
-      const fret = this._frets[index];
-      const finger =
-        this._fingers && this._fingers.length > 0 ? this._fingers[index] : 0;
-      dots.push(new Dot(this._frets.length - index, fret, finger));
-    }
-    return dots;
-  }
-
-  /**
    * Wether or not the diagram contains a barre
    */
   public hasBarre(){
@@ -103,16 +89,50 @@ export class ChordDiagram {
       return 0;
     }
     
-    return this.fretRange()[0];
+    return this.fretsRange()[0];
   }
 
   /**
    * Return the min and the max fret number of the diagram
+   * @param withOpenString Whether or not open string should be evaluated in the minimum value
+   * @returns Fret range (minimum value, maximum value)
    */
-  public fretRange(): [number, number] {
-    const playedFrets = this._frets.filter(f => f !== -1);
+  public fretsRange(withOpenString:boolean = true): [number, number] {
+    const minFilter = withOpenString? -1 : 0
+    const playedFrets = this._frets.filter(f => f > minFilter);
     const min: number = Math.min(...playedFrets);
     const max: number = Math.max(...playedFrets);
     return [min, max];
+  }
+
+  /**
+   * Get the chord relative position and its relative frets numbering
+   * @returns Chord relative position, relative frets numbering
+   */
+  public getRelativeFrets(): [number, number[]]{
+    var minimum = this.fretsRange()[0];
+    if(minimum < 1) {
+      minimum = 1;
+    }
+    const move =  -(minimum - 1);
+    var frets = this.tryMovingFrets(move)[1];
+    return [minimum, frets];
+  }
+
+  public tryMovingFrets(move:number):[boolean, number[]]{
+    if(move === 0) {
+      return [true, this._frets];
+    }
+    if(move > this.fretsRange()[0]){
+      return [false, this._frets];
+    }
+    var movedFrets = this._frets.map(f => {
+      if(f < 1){
+        return f;
+      }
+      return f + move;
+    })
+
+    return [true, movedFrets];
   }
 }

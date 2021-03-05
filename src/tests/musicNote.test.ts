@@ -79,3 +79,22 @@ test("parse empty note should fail", () => {
   const result = MusicNote.parse("");
   expect(result).toBeUndefined();
 });
+
+test("note equality with two defined notes", () => {
+  const noteString = "Ab";
+  const note = MusicNote.parse(noteString)!;
+  const expected = MusicNote.parse(noteString);
+  expect(note.equals(expected)).toBeTruthy();
+});
+
+test("note equality with one undefined note", () => {
+  const note = MusicNote.parse("Ab")!;
+  const expected = undefined;
+  expect(note.equals(expected)).toBeFalsy();
+});
+
+test("chord equality with two different chords", () => {
+  const note = MusicNote.parse("A")!;
+  const expected = MusicNote.parse("B")!;
+  expect(note.equals(expected)).toBeFalsy();
+});

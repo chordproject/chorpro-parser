@@ -3,6 +3,7 @@ import { LyricsType } from "../models/sections/LyricsBase";
 import { Tabs } from "../models/sections/Tabs";
 import { TimeSignature } from "../models/Song";
 import { ChordProParser } from "../parsers/ChordProParser";
+
 test("parse chordpro", () => {
   const cp = new ChordProParser();
   const song = cp.parse(sheet);
@@ -12,22 +13,29 @@ test("parse chordpro", () => {
   expect(song.capo).toEqual(4);
   expect(song.composers[0]).toEqual("Bill");
   expect(song.copyright).toEqual("2014 Shitting Bull Inc.");
-  expect(song.duration).toEqual(4*60+32);
+  expect(song.duration).toEqual(4 * 60 + 32);
   expect(song.key?.toString()).toEqual("Am");
   expect(song.lyricists[0]).toEqual("John");
   expect(song.tempo).toEqual(120);
-  expect(song.time).toEqual(<TimeSignature>{topNumber:6, bottomNumber:8});
+  expect(song.time).toEqual(<TimeSignature>{ topNumber: 6, bottomNumber: 8 });
   expect(song.title).toEqual("Praise Adonai");
   expect(song.subtitle).toEqual("ChordProject parser demo");
   expect(song.year).toEqual(2000);
 
-  const tabSection = <Tabs> song.sections.find(f => f instanceof Tabs);
+  const tabSection = <Tabs>song.sections.find((f) => f instanceof Tabs);
   expect(tabSection?.lines.length).toEqual(6);
   expect(tabSection?.value).toBeNull();
 
-  const chorusSection = <Lyrics> song.sections.find(f => f instanceof Lyrics && f.type === LyricsType.Chorus);
+  const chorusSection = <Lyrics>(
+    song.sections.find(
+      (f) => f instanceof Lyrics && f.type === LyricsType.Chorus
+    )
+  );
   expect(chorusSection?.lines.length).toEqual(7);
   expect(chorusSection?.value).toEqual("Chorus 1");
+
+  const uniqueChords = song.getUniqueChords();
+  expect(uniqueChords.length).toEqual(10);
 });
 
 const sheet = `
@@ -58,7 +66,7 @@ E|---------------|-------------
 {eot}
 
 {c:Verse 1}
-[Hm]Who is like [Bb11]Him,
+[Am]Who is like [Bb11]Him,
 The Lion and the [C#m]Lamb
 Seated on the [Gm]throne    [E7]
 [Am]Mountains bow [F]down

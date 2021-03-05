@@ -60,4 +60,16 @@ export class Chord {
     }
     return name;
   }
+
+  /**
+   * Compare this chord with the given chord and return TRUE if they are identical
+   * @param chord Chord to compare with
+   * @returns TRUE if the chord is identical
+   */
+  public equals(chord: Chord | null | undefined): boolean {
+    if(!chord){
+      return false;
+    }
+    return chord.toString() === this.toString();
+  }
 }

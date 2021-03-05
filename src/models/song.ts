@@ -1,6 +1,8 @@
 import { Chord } from "./Chord";
 import { ChordDiagram } from "./ChordDiagram";
 import { Key } from "./Key";
+import { LyricsLine } from "./LyricsLine";
+import { LyricsBase } from "./sections/LyricsBase";
 import { Section } from "./sections/Section";
 
 export interface TimeSignature {
@@ -8,17 +10,16 @@ export interface TimeSignature {
   bottomNumber: number;
 }
 export default class Song {
-
   /**
    * Title of the song
    */
   title: string | null = null;
-  
+
   /**
    * Subtitle of the song
    */
   subtitle: string | null = null;
-  
+
   /**
    * Album of the song
    * Multiple albums can be specified
@@ -30,7 +31,7 @@ export default class Song {
    * Multiple artists can be specified
    */
   artists: string[] = [];
-  
+
   /**
    * Composer of the song
    */
@@ -41,7 +42,7 @@ export default class Song {
    * Multiple arrangers can be specified
    */
   arrangers: string[] = [];
-  
+
   /**
    * Writer of the lyrics of the song.
    * Multiple lyricists can be specified
@@ -86,7 +87,7 @@ export default class Song {
   /**
    * Custom metadatas
    */
-  customMetadatas: [string, string | null][] = []
+  customMetadatas: [string, string | null][] = [];
 
   /**
    * User defined diagrams
@@ -100,6 +101,32 @@ export default class Song {
 
   sections: Section[] = [];
 
+  /**
+   * Get the list of the song's unique chords
+   * @returns Array of unique chords
+   */
+  public getUniqueChords(): Chord[] {
+    let chords:Chord[] = []
+    this.sections.forEach((section) => {
+      if (section instanceof LyricsBase) {
+        const lyrics = <LyricsBase>section;
+        lyrics.lines.forEach((line) => {
+          if (line instanceof LyricsLine) {
+            const lyricsLine = <LyricsLine>line;
+            lyricsLine.pairs.forEach(pair => {
+              if(pair.hasChord()){
+                const chord = pair.chord!;
+                if(!chords.find(f => f.equals(chord))){
+                  chords.push(chord);
+                }
+              }
+            });
+          }
+        });
+      }
+    });
+    return chords;
+  }
   /**
    * Get the real key (without the capo)
    */

@@ -3,7 +3,7 @@ import { ChordAliases } from "./ChordAliases";
 import { Chord } from "./models/Chord";
 import { ChordDiagram } from "./models/ChordDiagram";
 
-export class DiagramDefinitions {
+export class ChordDiagramCollection {
   async get(chord: Chord): Promise<ChordDiagram[] | undefined> {
     const note = ChordAliases.getNoteAlias(chord.note);
     if (!note) {

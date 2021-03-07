@@ -33,7 +33,6 @@ var chordSheet = `
     All the [Dm7] Angels and the [F]Saints
     [G]Sing [Bbsus2]praise
     {end_of_chorus}
-    
     `.substring(1);
 
 const cp = new ChordProParser();

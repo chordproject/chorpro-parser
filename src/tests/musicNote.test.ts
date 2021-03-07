@@ -1,4 +1,4 @@
-import { MusicNote, MusicLetter, MusicAccidental } from "../models/musicNote";
+import { MusicNote, MusicLetter, MusicAccidental } from "../models/MusicNote";
 
 test.each`
   note     | expected
@@ -47,17 +47,17 @@ test.each`
   expect(resultnote).toBeUndefined();
 });
 
-describe("return the note as text", () => {
-  it("sharp note", () => {
-    const note = new MusicNote(MusicLetter.A, MusicAccidental["#"]);
-    const noteString = note.toString();
-    expect(noteString).toEqual("A#");
-  });
-  it("bemol note", () => {
-    const note = new MusicNote(MusicLetter.G, MusicAccidental["b"]);
-    const noteString = note.toString();
-    expect(noteString).toEqual("Gb");
-  });
+test.each`
+  note
+  ${"A"}
+  ${"A#"}
+  ${"Bb"}
+  ${"C#"}
+  ${"Ebb"}
+  ${"F##"}
+`("return the note $note as text", ({ note }) => {
+  const result = MusicNote.parse(note)?.toString();
+  expect(result).toEqual(note);
 });
 
 test("get letter should return the note letter", () => {
@@ -78,4 +78,23 @@ test("get accidental should return the note accidental", () => {
 test("parse empty note should fail", () => {
   const result = MusicNote.parse("");
   expect(result).toBeUndefined();
+});
+
+test("note equality with two defined notes", () => {
+  const noteString = "Ab";
+  const note = MusicNote.parse(noteString)!;
+  const expected = MusicNote.parse(noteString);
+  expect(note.equals(expected)).toBeTruthy();
+});
+
+test("note equality with one undefined note", () => {
+  const note = MusicNote.parse("Ab")!;
+  const expected = undefined;
+  expect(note.equals(expected)).toBeFalsy();
+});
+
+test("chord equality with two different chords", () => {
+  const note = MusicNote.parse("A")!;
+  const expected = MusicNote.parse("B")!;
+  expect(note.equals(expected)).toBeFalsy();
 });

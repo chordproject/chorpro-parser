@@ -1,4 +1,4 @@
-import { MusicNote } from "./musicNote";
+import { MusicNote } from "./MusicNote";
 
 export class Key {
   private _note: MusicNote;

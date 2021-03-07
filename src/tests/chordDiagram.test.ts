@@ -1,7 +1,6 @@
-import { Chord } from "../models/chord";
-import { ChordDiagram } from "../models/chordDiagram";
-import { Dot } from "../models/dot";
-import { MusicLetter, MusicNote } from "../models/musicNote";
+import { Chord } from "../models/Chord";
+import { ChordDiagram } from "../models/ChordDiagram";
+import { MusicLetter, MusicNote } from "../models/MusicNote";
 
 test("has barre in 3rd", () => {
   const musicNote = new MusicNote(MusicLetter.C);
@@ -80,24 +79,6 @@ test("get variation should return diagram variation", () => {
   expect(variation).toEqual(expectedVariation);
 });
 
-test("get dots should return diagram dots", () => {
-  const frets = [1, 1, 3, 3, 3, 1];
-  const fingers = [1, 1, 2, 3, 4, 1];
-  const chord = Chord.parse("C");
-  const diagram = new ChordDiagram(chord!, frets, fingers);
-
-  const expectedDots = [
-    new Dot(6, 1, 1),
-    new Dot(5, 1, 1),
-    new Dot(4, 3, 2),
-    new Dot(3, 3, 3),
-    new Dot(2, 3, 4),
-    new Dot(1, 1, 1),
-  ];
-  const dots = diagram.dots;
-  expect(dots).toEqual(expectedDots);
-});
-
 test.each`
   diagram                                                              | chord    | frets                 | fingers
   ${"{define: Bes base-fret 1 frets 1 1 3 3 3 1 fingers 1 1 2 3 4 1}"} | ${"Bes"} | ${[1, 1, 3, 3, 3, 1]} | ${[1, 1, 2, 3, 4, 1]}
@@ -125,4 +106,38 @@ test.each`
 `("parse the diagram $diagram should return undefined", ({ diagram }) => {
   const result = ChordDiagram.parse(diagram);
   expect(result).toBeUndefined();
+});
+
+test("get relative frets in 9e position", () => {
+  const frets = [10,12,12,11,10,10];
+  const expectedFrets = [1,3,3,2,1,1];
+  const expectedPosition = 10;
+  const chord = Chord.parse("A");
+  const diagram = new ChordDiagram(chord!, frets);
+  const result = diagram.getRelativeFrets();
+
+  expect(result[0]).toEqual(expectedPosition);
+  expect(result[1]).toEqual(expectedFrets);
+});
+
+test("get relative frets for 1st position", () => {
+  const frets = [-1,3,2,0,1,0];
+  const expectedFrets = [-1,3,2,0,1,0];
+  const expectedPosition = 1;
+  const chord = Chord.parse("A");
+  const diagram = new ChordDiagram(chord!, frets);
+  const result = diagram.getRelativeFrets();
+
+  expect(result[0]).toEqual(expectedPosition);
+  expect(result[1]).toEqual(expectedFrets);
+});
+
+
+test("get frets range", () => {
+  const frets = [10,12,12,11,10,10];
+  const expectedRange = [10, 12];
+  const chord = Chord.parse("A");
+  const diagram = new ChordDiagram(chord!, frets);
+  const result = diagram.fretsRange();
+  expect(result).toEqual(expectedRange);
 });

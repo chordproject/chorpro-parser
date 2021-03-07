@@ -9,6 +9,9 @@ export class MusicNote {
   }
 
   public toString(): string {
+    if (this._accidental === MusicAccidental.none) {
+      return MusicLetter[this._letter];
+    }
     return MusicLetter[this._letter] + MusicAccidental[this._accidental];
   }
 
@@ -46,6 +49,18 @@ export class MusicNote {
     const accidentalEnum = MusicAccidental[accidental];
 
     return new MusicNote(letterEnum, accidentalEnum);
+  }
+
+   /**
+   * Compare this note with the given note and return TRUE if they are identical
+   * @param chord Note to compare with
+   * @returns TRUE if the note is identical
+   */
+  public equals(note: MusicNote | null | undefined): boolean {
+    if (!note) {
+      return false;
+    }
+    return note.toString() === this.toString();
   }
 }
 

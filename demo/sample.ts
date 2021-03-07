@@ -1,8 +1,10 @@
-'use strict';
+import { ChordProParser } from "../src/parsers/ChordProParser";
+
+('use strict');
 
 var chordSheet = `
     {title: Praise Adonai}
-    {subtitle: ChordProject viewer demo}
+    {subtitle: ChordProject Parser demo}
     {artist: Paul Baloche}
     {key: Am}
     
@@ -31,7 +33,8 @@ var chordSheet = `
     All the [Dm7] Angels and the [F]Saints
     [G]Sing [Bbsus2]praise
     {end_of_chorus}
-    
     `.substring(1);
 
-ChordProjectViewer.Main.run(chordSheet);
+const cp = new ChordProParser();
+const song = cp.parse(chordSheet);
+console.log(song);

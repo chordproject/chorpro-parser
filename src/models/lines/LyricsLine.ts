@@ -1,4 +1,4 @@
-import { ChordLyricsPair } from "./ChordLyricsPair";
+import { ChordLyricsPair } from "../ChordLyricsPair";
 import { Line, LineType } from "./Line";
 
 export class LyricsLine extends Line {

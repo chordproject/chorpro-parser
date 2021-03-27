@@ -1,4 +1,4 @@
-import { ParserWarning } from "../parsers/parserWarning";
+import { ParserWarning } from "../../parsers/parserWarning";
 
 test("get the string value of the warning", () => {
     const message = "unexpected error";

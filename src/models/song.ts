@@ -1,15 +1,12 @@
-import { Chord } from "./Chord";
-import { ChordDiagram } from "./ChordDiagram";
-import { Key } from "./Key";
-import { LyricsLine } from "./LyricsLine";
-import { LyricsBase } from "./sections/LyricsBase";
-import { Section } from "./sections/Section";
+import { Chord, Key, ChordDiagram } from ".";
+import { LyricsLine } from "./lines";
+import { LyricsBase, Section } from "./sections";
 
 export interface TimeSignature {
   topNumber: number;
   bottomNumber: number;
 }
-export default class Song {
+export class Song {
   /**
    * Title of the song
    */

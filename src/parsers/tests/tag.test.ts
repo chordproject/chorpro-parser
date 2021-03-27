@@ -1,4 +1,4 @@
-import { Tag, TagType } from "../parsers/Tag";
+import { Tag, TagType } from "../../parsers/Tag";
 
 test("parse custom tag", () => {
     const tag = Tag.parse(" x_test ");
@@ -25,11 +25,11 @@ test("parse meta tag", () => {
 });
 
 test("parse start_of_verse tag", () => {
-    const tag = Tag.parse("start_of_verse: Chorus 1");
+    const tag = Tag.parse("start_of_verse: Verse 1");
     const expectedType = TagType.StartOfBlock;
     const expectedName = "start_of_verse";
     const expectedShortName = "sov";
-    const expectedValue = "Chorus 1";
+    const expectedValue = "Verse 1";
     expect(tag).toBeDefined();
     expect(tag?.longName).toEqual(expectedName);
     expect(tag?.shortName).toEqual(expectedShortName);

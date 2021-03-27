@@ -120,9 +120,33 @@ test("get relative frets in 9e position", () => {
   expect(result[1]).toEqual(expectedFrets);
 });
 
+test("get relative frets in 9e position with open strings", () => {
+  const frets = [-1,12,12,11,0,0];
+  const expectedFrets = [-1,2,2,1,0,0];
+  const expectedPosition = 11;
+  const chord = Chord.parse("A");
+  const diagram = new ChordDiagram(chord!, frets);
+  const result = diagram.getRelativeFrets();
+
+  expect(result[0]).toEqual(expectedPosition);
+  expect(result[1]).toEqual(expectedFrets);
+});
+
 test("get relative frets for 1st position", () => {
   const frets = [-1,3,2,0,1,0];
   const expectedFrets = [-1,3,2,0,1,0];
+  const expectedPosition = 1;
+  const chord = Chord.parse("A");
+  const diagram = new ChordDiagram(chord!, frets);
+  const result = diagram.getRelativeFrets();
+
+  expect(result[0]).toEqual(expectedPosition);
+  expect(result[1]).toEqual(expectedFrets);
+});
+
+test("get relative frets for G chord", () => {
+  const frets = [2,3,0,0,0,3];
+  const expectedFrets = [2,3,0,0,0,3];
   const expectedPosition = 1;
   const chord = Chord.parse("A");
   const diagram = new ChordDiagram(chord!, frets);

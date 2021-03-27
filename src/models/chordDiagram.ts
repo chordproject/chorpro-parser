@@ -110,8 +110,10 @@ export class ChordDiagram {
    * @returns Chord relative position, relative frets numbering
    */
   public getRelativeFrets(): [number, number[]]{
-    var minimum = this.fretsRange()[0];
-    if(minimum < 1) {
+    let range = this.fretsRange(false);
+    let minimum = range[0];
+    let maximum = range[1];
+    if(minimum < 1 || maximum < 4) {
       minimum = 1;
     }
     const move =  -(minimum - 1);

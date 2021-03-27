@@ -1,5 +1,5 @@
-import { Line } from "../Line";
-import { Section, SectionType } from "./Section";
+import { Line } from "../lines";
+import { Section, SectionType } from ".";
 
 export class Tabs extends Section {
   /**
@@ -17,6 +17,7 @@ export class Tabs extends Section {
    */
   constructor(value: string | null = null) {
     super(SectionType.Tabs);
+    this._value = value
   }
 
   /**

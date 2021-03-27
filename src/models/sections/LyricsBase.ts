@@ -1,5 +1,4 @@
-import { Line } from "../Line";
-import { LyricsLine } from "../LyricsLine";
+import { Line } from "../lines/Line";
 import { Section, SectionType } from "./Section";
 
 export enum LyricsType {

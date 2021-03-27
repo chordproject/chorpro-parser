@@ -1,5 +1,5 @@
-import { ChordDiagramCollection } from "../ChordDiagramCollection";
-import { Chord } from "../models/Chord";
+import { ChordDiagramCollection } from "../../ChordDiagramCollection";
+import { Chord } from "../../models/Chord";
 
 test("get chord diagram for chord A", () => {
   const definitions = new ChordDiagramCollection();

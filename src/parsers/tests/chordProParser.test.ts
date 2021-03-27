@@ -1,8 +1,6 @@
-import { Lyrics } from "../models/sections/Lyrics";
-import { LyricsType } from "../models/sections/LyricsBase";
-import { Tabs } from "../models/sections/Tabs";
-import { TimeSignature } from "../models/Song";
-import { ChordProParser } from "../parsers/ChordProParser";
+import { Lyrics, LyricsType, Tabs } from "../../models/sections";
+import { TimeSignature } from "../../models";
+import { ChordProParser } from "../../parsers";
 
 test("parse chordpro", () => {
   const cp = new ChordProParser();
@@ -22,13 +20,13 @@ test("parse chordpro", () => {
   expect(song.subtitle).toEqual("ChordProject parser demo");
   expect(song.year).toEqual(2000);
 
-  const tabSection = <Tabs>song.sections.find((f) => f instanceof Tabs);
+  const tabSection = <Tabs>song.sections.find((f:any) => f instanceof Tabs);
   expect(tabSection?.lines.length).toEqual(6);
   expect(tabSection?.value).toBeNull();
 
   const chorusSection = <Lyrics>(
     song.sections.find(
-      (f) => f instanceof Lyrics && f.type === LyricsType.Chorus
+      (f:any) => f instanceof Lyrics && f.type === LyricsType.Chorus
     )
   );
   expect(chorusSection?.lines.length).toEqual(7);

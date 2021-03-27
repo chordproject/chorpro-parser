@@ -1,5 +1,5 @@
-import { Chord } from "../models/Chord";
-import { MusicAccidental, MusicLetter, MusicNote } from "../models/MusicNote";
+import { Chord } from "../Chord";
+import { MusicAccidental, MusicLetter, MusicNote } from "../MusicNote";
 
 test.each`
   chord  | expected

@@ -1,15 +1,16 @@
 import { Chord } from "../Chord";
+import { Key, KeyMode } from "../Key";
 import { MusicAccidental, MusicLetter, MusicNote } from "../MusicNote";
 
 test.each`
   chord  | expected
-  ${"A"} | ${new Chord(new MusicNote(MusicLetter.A))}
-  ${"B"} | ${new Chord(new MusicNote(MusicLetter.B))}
-  ${"C"} | ${new Chord(new MusicNote(MusicLetter.C))}
-  ${"D"} | ${new Chord(new MusicNote(MusicLetter.D))}
-  ${"E"} | ${new Chord(new MusicNote(MusicLetter.E))}
-  ${"F"} | ${new Chord(new MusicNote(MusicLetter.F))}
-  ${"G"} | ${new Chord(new MusicNote(MusicLetter.G))}
+  ${"A"} | ${new Chord(new Key(new MusicNote(MusicLetter.A), KeyMode.Major))}
+  ${"B"} | ${new Chord(new Key(new MusicNote(MusicLetter.B), KeyMode.Major))}
+  ${"C"} | ${new Chord(new Key(new MusicNote(MusicLetter.C), KeyMode.Major))}
+  ${"D"} | ${new Chord(new Key(new MusicNote(MusicLetter.D), KeyMode.Major))}
+  ${"E"} | ${new Chord(new Key(new MusicNote(MusicLetter.E), KeyMode.Major))}
+  ${"F"} | ${new Chord(new Key(new MusicNote(MusicLetter.F), KeyMode.Major))}
+  ${"G"} | ${new Chord(new Key(new MusicNote(MusicLetter.G), KeyMode.Major))}
 `(
   "parse the simple chord $chord and return the right chord",
   ({ chord, expected }) => {
@@ -30,7 +31,7 @@ test.each`
 `(
   "parse the simple chord $chord with accidental and return the right chord",
   ({ chord, letter, accidental }) => {
-    const expected = new Chord(new MusicNote(letter, accidental));
+    const expected = new Chord(new Key(new MusicNote(letter, accidental), KeyMode.Major));
     const resultKey = Chord.parse(chord);
     expect(resultKey).toMatchObject<Chord>(expected);
   }
@@ -47,7 +48,7 @@ test.each`
 `(
   "parse the chord $chord and return the right chord",
   ({ chord, letter, accidental, type }) => {
-    const expected = new Chord(new MusicNote(letter, accidental), type);
+    const expected = new Chord(new Key(new MusicNote(letter, accidental), KeyMode.Major), type);
     const resultKey = Chord.parse(chord);
     expect(resultKey).toMatchObject<Chord>(expected);
   }
@@ -55,7 +56,7 @@ test.each`
 
 test("parse the chord with a bass and return the right chord", () => {
   const expected = new Chord(
-    new MusicNote(MusicLetter.A, MusicAccidental.b),
+    new Key(new MusicNote(MusicLetter.A, MusicAccidental.b), KeyMode.Major),
     "sus2sus4",
     new MusicNote(MusicLetter.C)
   );
@@ -71,7 +72,7 @@ test.each`
 `(
   "parse the chord $chord should fail",
   ({ chord, letter, accidental, type }) => {
-    const expected = new Chord(new MusicNote(letter, accidental), type);
+    const expected = new Chord(new Key(new MusicNote(letter, accidental), KeyMode.Major), type);
     const resultKey = Chord.parse(chord);
     expect(resultKey).toBeUndefined();
   }
@@ -94,21 +95,21 @@ test.each`
   }
 );
 
-test("get music note return the music note", () => {
-  const expectedNote = new MusicNote(MusicLetter.A, MusicAccidental.b);
+test("get key return the key", () => {
+  const expectedNote = new Key(new MusicNote(MusicLetter.A, MusicAccidental.b));
   const chord = new Chord(expectedNote);
-  expect(chord.note).toEqual(expectedNote);
+  expect(chord.key).toEqual(expectedNote);
 });
 
 test("get type return the type", () => {
-  const expectedNote = new MusicNote(MusicLetter.A, MusicAccidental.b);
-  const expectedType = "m";
+  const expectedNote = new Key(new MusicNote(MusicLetter.A, MusicAccidental.b));
+  const expectedType = "maj7";
   const chord = new Chord(expectedNote, expectedType);
   expect(chord.type).toEqual(expectedType);
 });
 
 test("get bass return the bass", () => {
-  const expectedNote = new MusicNote(MusicLetter.A, MusicAccidental.b);
+  const expectedNote = new Key(new MusicNote(MusicLetter.A, MusicAccidental.b));
   const expectedBass = new MusicNote(MusicLetter.C, MusicAccidental.none);
   const chord = new Chord(expectedNote, "", expectedBass);
   expect(chord.bass).toEqual(expectedBass);

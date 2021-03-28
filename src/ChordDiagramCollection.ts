@@ -5,7 +5,7 @@ import { ChordDiagram } from "./models/ChordDiagram";
 
 export class ChordDiagramCollection {
   async get(chord: Chord): Promise<ChordDiagram[] | undefined> {
-    const note = ChordAliases.getNoteAlias(chord.note);
+    const note = ChordAliases.getNoteAlias(chord.key.note);
     if (!note) {
       return undefined;
     }

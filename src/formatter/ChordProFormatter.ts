@@ -1,17 +1,56 @@
+import { settings } from "node:cluster";
 import { Song } from "../models";
 import { EmptyLine, LyricsLine, TabLine } from "../models/lines";
+import { SectionType } from "../models/sections";
 import { IBuilder } from "./builders";
+import { FormatterSettings } from "./FormatterSettings";
 import { IFormatter } from "./IFormatter";
 
 export class ChordProFormatter implements IFormatter {
     private _builder: IBuilder;
     private _lines: string[] = [];
+    private _settings: FormatterSettings;
 
-    constructor(builder: IBuilder) {
+    constructor(builder: IBuilder, settings: FormatterSettings = new FormatterSettings()) {
         this._builder = builder;
+        this._settings = settings;
     }
 
     format(song: Song): string[] {
+        if(this._settings.showMetadata){
+            this.formatMetadata(song);
+        }
+
+        if (
+            song.sections.length > 0 &&
+            song.sections[0].lines.length > 0 &&
+            !(song.sections[0].lines[0] instanceof EmptyLine)
+        ) {
+            this._lines.push(...this._builder.emptyLine());
+        }
+
+        song.sections.forEach((section) => {
+            if(!this._settings.showTabs && section.sectionType == SectionType.Tabs){
+                return;
+            }
+
+            this._lines.push(...this._builder.sectionStart(section));
+            section.lines.forEach((line) => {
+                if (line instanceof EmptyLine) {
+                    this._lines.push(...this._builder.emptyLine());
+                } else if (line instanceof LyricsLine) {
+                    this._lines.push(...this._builder.lyricsLine(line));
+                } else if (line instanceof TabLine) {
+                    this._lines.push(...this._builder.tabLine(line));
+                }
+            });
+
+            this._lines.push(...this._builder.sectionEnd(section));
+        });
+        return this._lines;
+    }
+
+    private formatMetadata(song:Song){
         if (song.title?.trim()) {
             this._lines.push(...this._builder.titleMetadata(song.title));
         }
@@ -64,29 +103,5 @@ export class ChordProFormatter implements IFormatter {
                 ...this._builder.customMetadatas(song.customMetadatas)
             );
         }
-
-        if (
-            song.sections.length > 0 &&
-            song.sections[0].lines.length > 0 &&
-            !(song.sections[0].lines[0] instanceof EmptyLine)
-        ) {
-            this._lines.push(...this._builder.emptyLine());
-        }
-
-        song.sections.forEach((section) => {
-            this._lines.push(...this._builder.sectionStart(section));
-            section.lines.forEach((line) => {
-                if (line instanceof EmptyLine) {
-                    this._lines.push(...this._builder.emptyLine());
-                } else if (line instanceof LyricsLine) {
-                    this._lines.push(...this._builder.lyricsLine(line));
-                } else if (line instanceof TabLine) {
-                    this._lines.push(...this._builder.tabLine(line));
-                }
-            });
-
-            this._lines.push(...this._builder.sectionEnd(section));
-        });
-        return this._lines;
     }
 }

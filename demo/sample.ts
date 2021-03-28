@@ -1,4 +1,6 @@
-import {ChordProFormatter, ChordProParser, HtmlBuilder, TextBuilder } from "../src"
+import {ChordProBuilder, ChordProFormatter, ChordProParser, HtmlBuilder, TextBuilder } from "../src"
+import { BuilderSettingsBase } from "../src/formatter/builders/BuilderSettingsBase";
+import { FormatterSettings } from "../src/formatter/FormatterSettings";
 
 ('use strict');
 
@@ -29,7 +31,7 @@ var chordSheet = `
     {start_of_chorus}
     [F]Praise Ado[Am]nai
     From the [G]rising of the sun
-    'Till the [Dm7]end of every [F]day[G]
+    'Till the [Dm7]end of every [Fsu]day[G]
     [F]Praise Ado[Am]nai
     All the [G]nations of the earth
     All the [Dm7]Angels and the [F]Saints
@@ -42,8 +44,16 @@ const song = cp.parse(chordSheet);
 console.log(song);
 console.log(cp.warnings)
 
-const htmlBuilder = new TextBuilder();
-const formatter = new ChordProFormatter(htmlBuilder);
+const settings = new BuilderSettingsBase();
+settings.useSimpleChord = true;
+settings.showChords = false;
+
+const formatterSettings = new FormatterSettings();
+formatterSettings.showMetadata = true;
+formatterSettings.showTabs = true;
+
+const htmlBuilder = new HtmlBuilder(settings);
+const formatter = new ChordProFormatter(htmlBuilder, formatterSettings);
 const result = formatter.format(song);
 //document.body.innerHTML = `${result.join("\n")}`
 document.body.innerHTML = `<pre>${result.join("\n")}</pre>`

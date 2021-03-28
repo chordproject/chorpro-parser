@@ -1,9 +1,19 @@
 import { CommentLine, CustomLine, LyricsLine, TabLine } from "../../models/lines";
 import { Tabs, Section, Lyrics } from "../../models/sections";
 import { DataHelper } from "../DataHelper";
+import { BuilderSettingsBase } from "./BuilderSettingsBase";
 import { IBuilder } from "./IBuilder";
 
 export class TextBuilder implements IBuilder {
+    private _settings: BuilderSettingsBase;
+
+    /**
+     *
+     */
+    constructor(settings: BuilderSettingsBase = new BuilderSettingsBase()) {
+        this._settings = settings;
+    }
+
     private writeMetadata(label: string, metadata: string | null): string {
         if (metadata) {
             return `${DataHelper.toProperCase(label)}: ${metadata}`;
@@ -86,16 +96,20 @@ export class TextBuilder implements IBuilder {
         let secondLine = "";
         let lines: string[] = [];
         line.pairs.forEach((pair) => {
-            let spacesCount = 0;
-            if (pair.chord) {
-                firstLine += pair.chord.toString();
-                spacesCount = pair.lyrics.length - pair.chord.toString().length;
-            } else if (pair.text) {
-                firstLine += pair.text;
-                spacesCount = pair.lyrics.length - pair.text.length;
-            } else {
-                spacesCount = pair.lyrics.length;
+            let spacesCount = 1;
+            if (this._settings.showChords) {
+                if (pair.chord) {
+                    let chord = this._settings.useSimpleChord ? pair.chord.toSimpleString() : pair.chord.toString();
+                    firstLine += chord;
+                    spacesCount = pair.lyrics.length - chord.length;
+                } else if (pair.text) {
+                    firstLine += pair.text;
+                    spacesCount = pair.lyrics.length - pair.text.length;
+                } else {
+                    spacesCount = pair.lyrics.length;
+                }
             }
+
             if (spacesCount > 0) {
                 firstLine += " ".repeat(spacesCount);
                 secondLine += pair.lyrics;
@@ -135,6 +149,22 @@ export class TextBuilder implements IBuilder {
     }
 
     sectionEnd(section: Section): string[] {
+        return [];
+    }
+
+    metadataStart(): string[] {
+        return ["*".repeat(10)];
+    }
+
+    metadataEnd(): string[] {
+        return ["*".repeat(10)];
+    }
+
+    contentStart(): string[] {
+        return [];
+    }
+
+    contentEnd(): string[] {
         return [];
     }
 }

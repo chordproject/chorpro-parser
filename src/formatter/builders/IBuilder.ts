@@ -23,6 +23,12 @@ export interface IBuilder {
     tabLine(line: TabLine): string[];
     customLine(line: CustomLine): string[];
 
+    metadataStart(): string[];
+    metadataEnd(): string[];
+
+    contentStart(): string[];
+    contentEnd():string[]
+
     sectionStart(section: Section): string[];
     sectionEnd(section: Section): string[];
 }

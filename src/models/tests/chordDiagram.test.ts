@@ -1,10 +1,11 @@
 import { Chord } from "../../models/Chord";
 import { ChordDiagram } from "../../models/ChordDiagram";
 import { MusicLetter, MusicNote } from "../../models/MusicNote";
+import { Key } from "../Key";
 
 test("has barre in 3rd", () => {
-  const musicNote = new MusicNote(MusicLetter.C);
-  const chord = new Chord(musicNote);
+  const note = new Key(new MusicNote(MusicLetter.C));
+  const chord = new Chord(note);
   const frets = [-1, 3, 5, 5, 5, 3];
   const fingers = [0, 1, 2, 3, 4, 1];
   const diagram = new ChordDiagram(chord, frets, fingers);
@@ -34,7 +35,7 @@ test("has no barre", () => {
 test("get fingers should return diagram fingers", () => {
   const expectedFingers = [0, 1, 2, 3, 4, 1];
   const frets = [-1, 3, 5, 5, 5, 3];
-  const note = new MusicNote(MusicLetter.C);
+  const note = new Key(new MusicNote(MusicLetter.C));
   const chord = new Chord(note);
   const diagram = new ChordDiagram(chord, frets, expectedFingers);
 
@@ -44,7 +45,7 @@ test("get fingers should return diagram fingers", () => {
 
 test("get frets should return diagram frets", () => {
   const expectedFrets = [-1, 3, 5, 5, 5, 3];
-  const note = new MusicNote(MusicLetter.C);
+  const note = new Key(new MusicNote(MusicLetter.C));
   const chord = new Chord(note);
   const diagram = new ChordDiagram(chord, expectedFrets);
 
@@ -55,7 +56,7 @@ test("get frets should return diagram frets", () => {
 test("get chord should return diagram chord", () => {
   const frets = [1, 1, 3, 3, 3, 1];
   const fingers = [1, 1, 2, 3, 4, 1];
-  const note = new MusicNote(MusicLetter.C);
+  const note = new Key(new MusicNote(MusicLetter.C));
   const expectedChord = new Chord(note);
   const diagram = new ChordDiagram(expectedChord, frets, fingers);
 
@@ -65,7 +66,7 @@ test("get chord should return diagram chord", () => {
 
 test("get variation should return diagram variation", () => {
   const frets = [-1, 3, 5, 5, 5, 3];
-  const note = new MusicNote(MusicLetter.C);
+  const note = new Key(new MusicNote(MusicLetter.C));
   const chord = new Chord(note);
   const expectedVariation = 2;
   const diagram = new ChordDiagram(

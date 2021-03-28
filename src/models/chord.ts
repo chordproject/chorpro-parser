@@ -1,9 +1,10 @@
+import { Key } from "./Key";
 import { MusicNote } from "./MusicNote";
 
 export class Chord {
-  private _note: MusicNote;
-  public get note(): MusicNote {
-    return this._note;
+  private _key: Key;
+  public get key(): Key {
+    return this._key;
   }
 
   private _type: string;
@@ -17,16 +18,16 @@ export class Chord {
   }
 
   constructor(
-    note: MusicNote,
+    note: Key,
     type: string = "",
     bass: MusicNote | null = null
   ) {
-    this._note = note;
+    this._key = note;
     this._type = type;
     this._bass = bass;
   }
 
-  private static readonly chordRegex = /^(?<note>[A-G](#{1,2}|b{1,2}|x)?)(?<type>(?!\/).*?)?(?:$|(?:\/(?<bass>[A-G](#{1,2}|b{1,2}|x)?)))$/;
+  private static readonly chordRegex = /^(?<note>[A-G](#{1,2}|b{1,2}|x)?(min|m(?!aj)|-)?)(?<type>(?!\/).*?)?(?:$|(?:\/(?<bass>[A-G](#{1,2}|b{1,2}|x)?)))$/;
 
   public static parse(text: string): Chord | undefined {
     if (!text) {
@@ -39,7 +40,7 @@ export class Chord {
       return undefined;
     }
     const noteMatch = matches.groups["note"];
-    const note = MusicNote.parse(noteMatch);
+    const note = Key.parse(noteMatch);
     if (note == undefined) {
       return undefined;
     }
@@ -54,7 +55,7 @@ export class Chord {
    * Get the string description of the chord
    */
   public toString(): string {
-    var name = this._note.toString() + this._type;
+    var name = this._key.toString() + this._type;
     if (this._bass) {
       name += "/" + this._bass.toString();
     }

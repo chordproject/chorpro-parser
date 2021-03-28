@@ -1,4 +1,4 @@
-import { MusicNote } from "./MusicNote";
+import { MusicAccidental, MusicNote } from "./MusicNote";
 
 export class Key {
   private _note: MusicNote;
@@ -11,7 +11,7 @@ export class Key {
     return this._mode;
   }
 
-  constructor(note: MusicNote, mode: KeyMode) {
+  constructor(note: MusicNote, mode: KeyMode = KeyMode.Major) {
     this._note = note;
     this._mode = mode;
   }

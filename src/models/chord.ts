@@ -54,12 +54,19 @@ export class Chord {
   /**
    * Get the string description of the chord
    */
-  public toString(): string {
-    var name = this._key.toString() + this._type;
-    if (this._bass) {
+  public toString(showType:boolean = true, showBass:boolean = true): string {
+    var name = this._key.toString();
+    if(showType){
+      name += this._type;
+    }
+    if (showBass && this._bass) {
       name += "/" + this._bass.toString();
     }
     return name;
+  }
+
+  public toSimpleString(): string{
+    return this.toString(false, false);
   }
 
   /**

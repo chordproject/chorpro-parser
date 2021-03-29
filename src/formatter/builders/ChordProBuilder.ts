@@ -1,9 +1,17 @@
 import { LyricsLine, CommentLine, TabLine, CustomLine } from "../../models/lines";
 import { Lyrics, Section, Tabs } from "../../models/sections";
 import { DataHelper } from "../DataHelper";
+import { BuilderSettingsBase } from "./BuilderSettingsBase";
 import { IBuilder } from "./IBuilder";
 
 export class ChordProBuilder implements IBuilder {
+
+  private _settings: BuilderSettingsBase;
+    
+  constructor(settings:BuilderSettingsBase = new BuilderSettingsBase()) {
+      this._settings = settings;        
+  }
+
   private buildMetadata(name: string, value: string | null): string {
     if (value) {
       return `{${name}: ${value}}`;
@@ -86,8 +94,13 @@ export class ChordProBuilder implements IBuilder {
   lyricsLine(line: LyricsLine): string[] {
     let result = "";
     line.pairs.forEach((pair) => {
+      if(!this._settings.showChords){
+        result += pair.lyrics;
+        return;
+      }
       if (pair.chord) {
-        result += `[${pair.chord.toString()}]${pair.lyrics}`;
+        let chord = this._settings.useSimpleChord? pair.chord.toSimpleString(): pair.chord.toString();
+        result += `[${chord}]${pair.lyrics}`;
       } else if (pair.text) {
         result += `[*${pair.text}]${pair.lyrics}`;
       } else {
@@ -122,6 +135,22 @@ export class ChordProBuilder implements IBuilder {
       let sectionName = section instanceof Tabs ? "tab" : section.name;
       return [this.buildMetadata("end_of_" + sectionName, null)];
     }
+    return [];
+  }
+
+  metadataStart(): string[] {
+    return [];
+  }
+
+  metadataEnd(): string[] {
+    return [];
+  }
+  
+  contentStart(): string[] {
+    return [];
+  }
+  
+  contentEnd(): string[] {
     return [];
   }
 }

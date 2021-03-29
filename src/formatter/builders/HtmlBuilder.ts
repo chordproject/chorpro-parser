@@ -1,9 +1,17 @@
+import { cpuUsage } from "node:process";
 import { LyricsLine, CommentLine, TabLine, CustomLine } from "../../models/lines";
 import { Lyrics, Section, Tabs, LyricsType } from "../../models/sections";
 import { DataHelper } from "../DataHelper";
+import { BuilderSettingsBase } from "./BuilderSettingsBase";
 import { IBuilder } from "./IBuilder";
 
 export class HtmlBuilder implements IBuilder {
+    private _settings: BuilderSettingsBase;
+
+    constructor(settings: BuilderSettingsBase = new BuilderSettingsBase()) {
+        this._settings = settings;
+    }
+
     protected buildHtmlElement(tag: string, value: string, classNames: string[] = []): string {
         return `<${tag} class="${classNames.join(" ")}">${value}</${tag}>`;
     }
@@ -91,17 +99,20 @@ export class HtmlBuilder implements IBuilder {
     }
 
     lyricsLine(line: LyricsLine): string[] {
-        
-        let pairs:string[] = [];
+        let pairs: string[] = [];
         line.pairs.forEach((pair) => {
             let chordAndLyrics = "";
-            if (pair.chord) {
-                chordAndLyrics += this.buildHtmlElement("div", pair.chord.toString(), ["chord"]);
-            } else if (pair.text) {
-                chordAndLyrics += this.buildHtmlElement("div", pair.text, ["annotation"]);
+            if (this._settings.showChords) {
+                if (pair.chord) {
+                    let chord = this._settings.useSimpleChord ? pair.chord.toSimpleString() : pair.chord.toString();
+                    chordAndLyrics += this.buildHtmlElement("div", chord, ["chord"]);
+                } else if (pair.text) {
+                    chordAndLyrics += this.buildHtmlElement("div", pair.text, ["annotation"]);
+                }
             }
-            if(pair.lyrics.trim()){
-                chordAndLyrics += this.buildHtmlElement("div", pair.lyrics, ["lyrics"])
+
+            if (pair.lyrics.trim()) {
+                chordAndLyrics += this.buildHtmlElement("div", pair.lyrics, ["lyrics"]);
             }
             pairs.push(this.buildHtmlElement("div", chordAndLyrics, ["column"]));
         });
@@ -118,6 +129,7 @@ export class HtmlBuilder implements IBuilder {
         const classNames = ["row", "tab-line"];
         return [this.buildHtmlElement("div", line.value, classNames)];
     }
+
     customLine(line: CustomLine): string[] {
         const classNames = ["metadata", "custom-metadata", line.name];
         return [this.buildHtmlElement("div", line.value ? line.value : "", classNames)];
@@ -155,6 +167,24 @@ export class HtmlBuilder implements IBuilder {
     }
 
     sectionEnd(section: Section): string[] {
+        return ["</div>"];
+    }
+
+    metadataStart(): string[] {
+        const classNames = ["song-metadata"];
+        return [`<div class=${classNames.join(" ")}>`];
+    }
+
+    metadataEnd(): string[] {
+        return ["</div>"];
+    }
+
+    contentStart(): string[] {
+        const classNames = ["song-content"];
+        return [`<div class=${classNames.join(" ")}>`];
+    }
+
+    contentEnd(): string[] {
         return ["</div>"];
     }
 }

@@ -1,6 +1,6 @@
-import {ChordProBuilder, ChordProFormatter, ChordProParser, HtmlBuilder, TextBuilder } from "../src"
-import { BuilderSettingsBase } from "../src/formatter/builders/BuilderSettingsBase";
-import { FormatterSettings } from "../src/formatter/FormatterSettings";
+import { ChordProFormatter, ChordProParser, HtmlBuilder } from '../src';
+import { BuilderSettingsBase } from '../src/formatter/builders/BuilderSettingsBase';
+import { FormatterSettings } from '../src/formatter/FormatterSettings';
 
 ('use strict');
 
@@ -42,11 +42,11 @@ var chordSheet = `
 const cp = new ChordProParser();
 const song = cp.parse(chordSheet);
 console.log(song);
-console.log(cp.warnings)
+console.log(cp.warnings);
 
 const settings = new BuilderSettingsBase();
 settings.useSimpleChord = true;
-settings.showChords = false;
+settings.showChords = true;
 
 const formatterSettings = new FormatterSettings();
 formatterSettings.showMetadata = true;
@@ -56,5 +56,5 @@ const htmlBuilder = new HtmlBuilder(settings);
 const formatter = new ChordProFormatter(htmlBuilder, formatterSettings);
 const result = formatter.format(song);
 //document.body.innerHTML = `${result.join("\n")}`
-document.body.innerHTML = `<pre>${result.join("\n")}</pre>`
-
+//document.body.innerHTML = `<pre>${result.join('\n')}</pre>`;
+document.getElementById('demo').innerHTML = `<pre>${result.join('\n')}</pre>`;

@@ -4,18 +4,16 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = merge(common, {
 	entry: {
-		app: ['./demo/sample.ts', './src/index.ts'],
+		app: ['./demo/sample.ts'],
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
-			title: 'ChordProject parser',
-			templateContent: `<p>Check the console...</p>`,
+			template: './demo/sample.html',
 		}),
 	],
 	mode: 'development',
 	devtool: 'inline-source-map',
 	devServer: {
 		contentBase: './demo',
-		port: 8081
 	},
 });

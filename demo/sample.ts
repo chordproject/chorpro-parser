@@ -46,13 +46,13 @@ console.log(cp.warnings)
 
 const settings = new BuilderSettingsBase();
 settings.useSimpleChord = true;
-settings.showChords = false;
+settings.showChords = true;
 
 const formatterSettings = new FormatterSettings();
 formatterSettings.showMetadata = true;
 formatterSettings.showTabs = true;
 
-const htmlBuilder = new HtmlBuilder(settings);
+const htmlBuilder = new TextBuilder(settings);
 const formatter = new ChordProFormatter(htmlBuilder, formatterSettings);
 const result = formatter.format(song);
 //document.body.innerHTML = `${result.join("\n")}`

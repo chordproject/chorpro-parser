@@ -124,10 +124,18 @@ export class Song {
     });
     return chords;
   }
+
   /**
    * Get the real key (without the capo)
    */
-  public getRealKey(): Key {
-    throw new Error("Not implemented exception");
+  public getRealKey(): Key | null {
+    if(!this.key){
+      return null;
+    }
+
+    if(this.capo > 0){
+
+    }
+    return null;
   }
 }

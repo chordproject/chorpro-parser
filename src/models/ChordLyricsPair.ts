@@ -1,33 +1,9 @@
 import { Chord } from "./Chord";
 
 export class ChordLyricsPair {
-  /**
-   * Getter chord
-   * @return The chord
-   */
-  public get chord(): Chord | null {
-    return this._chord;
-  }
-
-  /**
-   * Getter lyrics
-   * @return The lyrics
-   */
-  public get lyrics(): string {
-    return this._lyrics;
-  }
-
-  /**
-   * Getter text
-   * @return The text
-   */
-  public get text(): string | null {
-    return this._text;
-  }
-
-  private _chord: Chord | null;
-  private _lyrics: string;
-  private _text: string | null;
+  public chord: Chord | null;
+  public lyrics: string;
+  public text: string | null;
 
   /**
    * ChordLyricsPair's constructor
@@ -39,17 +15,17 @@ export class ChordLyricsPair {
     chord: Chord | null = null,
     text: string | null = null
   ) {
-    this._lyrics = lyrics;
-    this._chord = chord;
-    this._text = text;
+    this.lyrics = lyrics;
+    this.chord = chord;
+    this.text = text;
   }
 
   public hasChord(): boolean {
-    return this._chord !== null;
+    return this.chord !== null;
   }
 
   public hasText(): boolean {
-    return this._text !== null;
+    return this.text !== null;
   }
 
 
@@ -119,7 +95,7 @@ export class ChordLyricsPair {
     const pair = new ChordLyricsPair(lyrics, myChord, text);
     const success = myChord !== undefined;
     if(!success){
-      pair._text = chord;
+      pair.text = chord;
     }
     return [success, pair];
   }

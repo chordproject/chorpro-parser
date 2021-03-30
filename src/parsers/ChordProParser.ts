@@ -1,5 +1,5 @@
 import { Line, LyricsLine, CommentLine, EmptyLine, CustomLine, TabLine } from "../models/lines";
-import { Key, ChordLyricsPair, ChordDiagram, Song } from "../models";
+import { Key, ChordLyricsPair, ChordDiagram, Song, Chord } from "../models";
 import { Section, SectionType, Lyrics, LyricsBase, LyricsType, SimpleLyrics, Tabs } from "../models/sections";
 import { ParserWarning } from "./parserWarning";
 import { Tag, TagType } from "./tag";
@@ -42,17 +42,22 @@ export class ChordProParser {
         this._song.rawContent = sheet;
         const lines = sheet.split(/\r\n|\r|\n/);
 
-        //Remove empty lines at the begining of the song
+        // remove empty lines at the begining of the song
         while (!lines[0].trim()) {
             lines.splice(0, 1);
         }
 
-        //Parse the lines
+        // parse the lines
         lines.forEach((line) => {
             this.parseLine(line);
             this._currentLineIndex++;
         });
         this.completeCurrentSection();
+        
+        // set a possible key if none has been set
+        if(!this._song.key){
+
+        }
         return this._song;
     }
 

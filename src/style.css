@@ -1,0 +1,28 @@
+.lyrics {
+	white-space: pre;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.column {
+	float: left;
+}
+
+/* Clear floats after the columns */
+.row:after {
+	content: '';
+	display: table;
+	clear: both;
+}
+
+.chord {
+	height: 1em;
+}
+
+.empty-line {
+	height: 1em;
+}
+
+.chorus-section {
+	border-left: thick solid #5a3e3e;
+	padding-left: 5px;
+}

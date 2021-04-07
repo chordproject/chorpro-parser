@@ -1,5 +1,5 @@
-import { Key, KeyMode } from "../../models/Key";
-import { MusicLetter, MusicNote, MusicAccidental } from "../../models/MusicNote";
+import { Key, KeyMode } from "../Key";
+import { MusicLetter, MusicNote, MusicAccidental } from "../MusicNote";
 
 test.each`
   key    | expected

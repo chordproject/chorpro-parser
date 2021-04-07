@@ -6,7 +6,7 @@ import { IBuilder } from "./builders";
 import { FormatterSettings } from "./FormatterSettings";
 import { IFormatter } from "./IFormatter";
 
-export class ChordProFormatter implements IFormatter {
+export class Formatter implements IFormatter {
     private _builder: IBuilder;
     private _lines: string[] = [];
     private _settings: FormatterSettings;

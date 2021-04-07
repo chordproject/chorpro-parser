@@ -1,6 +1,17 @@
-import { LyricsBase, LyricsType } from "./LyricsBase";
+import { IClonable } from "../IClonable";
+import { LyricsSectionBase, LyricsType } from "./LyricsSectionBase";
+import { Section } from "./Section";
 
-export class Lyrics extends LyricsBase {
+export class LyricsSection extends LyricsSectionBase {
+
+  public clone(): Section {
+    let section = new LyricsSection(this.type, this._name, this._value);
+    this._lines.forEach(line => {
+      section.addLine(line.clone());
+    });
+    return section;
+  }
+
   private _name: string;
 
   private _value: string | null;

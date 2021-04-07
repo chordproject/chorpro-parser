@@ -1,5 +1,5 @@
-export {Lyrics} from "./Lyrics";
-export {SimpleLyrics} from "./SimpleLyrics";
-export {LyricsBase, LyricsType} from "./LyricsBase";
+export {LyricsSection as Lyrics} from "./LyricsSection";
+export {SimpleLyricsSection as SimpleLyrics} from "./SimpleLyricsSection";
+export {LyricsSectionBase as LyricsBase, LyricsType} from "./LyricsSectionBase";
 export {Section, SectionType} from "./Section";
-export {Tabs} from "./Tabs";
+export {TabsSection as Tabs} from "./TabsSection";

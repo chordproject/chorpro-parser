@@ -1,4 +1,4 @@
-import { MusicNote, MusicLetter, MusicAccidental } from "../../models/MusicNote";
+import { MusicNote, MusicLetter, MusicAccidental } from "../MusicNote";
 
 test.each`
   note     | expected

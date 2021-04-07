@@ -1,26 +1,26 @@
-export class MusicNote {
-  private _accidental: MusicAccidental;
-  public get accidental(): MusicAccidental {
-    return this._accidental;
-  }
-  private _letter: MusicLetter;
-  public get letter(): MusicLetter {
-    return this._letter;
-  }
+import { IClonable } from "./IClonable";
 
+export class MusicNote implements IClonable<MusicNote> {
+  accidental: MusicAccidental;
+  letter: MusicLetter;
+  
   public toString(): string {
-    if (this._accidental === MusicAccidental.none) {
-      return MusicLetter[this._letter];
+    if (this.accidental === MusicAccidental.none) {
+      return MusicLetter[this.letter];
     }
-    return MusicLetter[this._letter] + MusicAccidental[this._accidental];
+    return MusicLetter[this.letter] + MusicAccidental[this.accidental];
   }
 
   constructor(
     letter: MusicLetter,
     accidental: MusicAccidental = MusicAccidental.none
   ) {
-    this._letter = letter;
-    this._accidental = accidental;
+    this.letter = letter;
+    this.accidental = accidental;
+  }
+
+  clone(): MusicNote {
+    return new MusicNote(this.letter, this.accidental);
   }
 
   public static parse(text: string): MusicNote | undefined {

@@ -1,6 +1,9 @@
 import { Line, LineType } from "./Line";
 
 export class CustomLine extends Line {
+  clone(): Line {
+    return new CustomLine(this.name, this.value);
+  }
   /**
    * Getter name
    * @return The name

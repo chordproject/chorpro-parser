@@ -1,5 +1,5 @@
 import { ChordAliases } from "../../ChordAliases";
-import { MusicNote } from "../../models/MusicNote";
+import { MusicNote } from "../MusicNote";
 
 test.each`
   name     | expected

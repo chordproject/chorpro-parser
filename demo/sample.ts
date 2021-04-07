@@ -1,6 +1,7 @@
-import { ChordProFormatter, ChordProParser, HtmlBuilder } from '../src';
+import { Formatter, ChordProParser, HtmlBuilder, TextBuilder, Transformer } from '../src';
 import { BuilderSettingsBase } from '../src/formatter/builders/BuilderSettingsBase';
 import { FormatterSettings } from '../src/formatter/FormatterSettings';
+import { MusicAccidental, MusicLetter, MusicNote } from '../src/models';
 
 ('use strict');
 
@@ -31,7 +32,7 @@ var chordSheet = `
     {start_of_chorus}
     [F]Praise Ado[Am]nai
     From the [G]rising of the sun
-    'Till the [Dm7]end of every [Fsu]day[G]
+    'Till the [Dm7]end of every [F]day[G]
     [F]Praise Ado[Am]nai
     All the [G]nations of the earth
     All the [Dm7]Angels and the [F]Saints
@@ -41,20 +42,22 @@ var chordSheet = `
 
 const cp = new ChordProParser();
 const song = cp.parse(chordSheet);
+const transformer = new Transformer();
+const transposedSong = transformer.transpose(song, new MusicNote(MusicLetter.E));
 console.log(song);
 console.log(cp.warnings);
 
 const settings = new BuilderSettingsBase();
-settings.useSimpleChord = true;
+settings.useSimpleChord = false;
 settings.showChords = true;
 
 const formatterSettings = new FormatterSettings();
 formatterSettings.showMetadata = true;
 formatterSettings.showTabs = true;
 
-const htmlBuilder = new HtmlBuilder(settings);
-const formatter = new ChordProFormatter(htmlBuilder, formatterSettings);
-const result = formatter.format(song);
+const htmlBuilder = new TextBuilder(settings);
+const formatter = new Formatter(htmlBuilder, formatterSettings);
+const result = formatter.format(transposedSong);
 //document.body.innerHTML = `${result.join("\n")}`
 //document.body.innerHTML = `<pre>${result.join('\n')}</pre>`;
-document.getElementById('demo').innerHTML = `<pre>${result.join('\n')}</pre>`;
+document.getElementById('demo')!.innerHTML = `<pre>${result.join('\n')}</pre>`;

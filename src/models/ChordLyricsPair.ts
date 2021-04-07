@@ -1,6 +1,7 @@
 import { Chord } from "./Chord";
+import { IClonable } from "./IClonable";
 
-export class ChordLyricsPair {
+export class ChordLyricsPair implements IClonable<ChordLyricsPair> {
   public chord: Chord | null;
   public lyrics: string;
   public text: string | null;
@@ -18,6 +19,9 @@ export class ChordLyricsPair {
     this.lyrics = lyrics;
     this.chord = chord;
     this.text = text;
+  }
+  clone(): ChordLyricsPair {
+    return new ChordLyricsPair(this.lyrics, this.chord?.clone(), this.text);
   }
 
   public hasChord(): boolean {

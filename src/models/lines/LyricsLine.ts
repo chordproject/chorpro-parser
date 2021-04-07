@@ -2,6 +2,13 @@ import { ChordLyricsPair } from "../ChordLyricsPair";
 import { Line, LineType } from "./Line";
 
 export class LyricsLine extends Line {
+  clone(): Line {
+    let pairs:ChordLyricsPair[] = [];
+    this._pairs.forEach(pair => {
+      pairs.push(pair.clone());
+    });
+    return new LyricsLine(pairs);
+  }
   /**
    * Getter pairs
    * @return The line's chord/lyrics pairs

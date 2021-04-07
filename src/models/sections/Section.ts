@@ -1,3 +1,4 @@
+import { IClonable } from "../IClonable";
 import { Line } from "../lines/Line";
 
 export enum SectionType {
@@ -7,7 +8,7 @@ export enum SectionType {
   None = "none",
 }
 
-export abstract class Section {
+export abstract class Section implements IClonable<Section> {
   /**
    * Getter lines
    * @return Line array
@@ -38,4 +39,6 @@ export abstract class Section {
    * @param line Line
    */
   public abstract addLine(line: Line) : void;
+
+  public abstract clone(): Section;
 }

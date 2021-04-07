@@ -1,7 +1,14 @@
 import { Line } from "../lines";
 import { Section, SectionType } from ".";
 
-export class Tabs extends Section {
+export class TabsSection extends Section {
+  public clone(): Section {
+    let section = new TabsSection(this._value);
+    this._lines.forEach(line => {
+        section.addLine(line.clone());
+    });
+    return section;
+  }
   /**
    * Getter value
    * @return {string }

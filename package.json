@@ -37,6 +37,7 @@
 		"webpack-dev-server": "^3.11.2"
 	},
 	"dependencies": {
-		"@types/jquery": "^3.5.5"
+		"@types/jquery": "^3.5.5",
+		"clone": "^2.1.2"
 	}
 }

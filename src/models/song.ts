@@ -1,4 +1,5 @@
-import { Chord, Key, ChordDiagram } from ".";
+import { Chord, Key, ChordDiagram, MusicNote } from ".";
+import { IClonable } from "./IClonable";
 import { LyricsLine } from "./lines";
 import { LyricsBase, Section } from "./sections";
 
@@ -6,7 +7,7 @@ export interface TimeSignature {
   topNumber: number;
   bottomNumber: number;
 }
-export class Song {
+export class Song implements IClonable<Song> {
   /**
    * Title of the song
    */
@@ -103,7 +104,7 @@ export class Song {
    * @returns Array of unique chords
    */
   public getUniqueChords(): Chord[] {
-    let chords:Chord[] = []
+    let chords: Chord[] = []
     this.sections.forEach((section) => {
       if (section instanceof LyricsBase) {
         const lyrics = <LyricsBase>section;
@@ -111,9 +112,9 @@ export class Song {
           if (line instanceof LyricsLine) {
             const lyricsLine = <LyricsLine>line;
             lyricsLine.pairs.forEach(pair => {
-              if(pair.hasChord()){
+              if (pair.hasChord()) {
                 const chord = pair.chord!;
-                if(!chords.find(f => f.equals(chord))){
+                if (!chords.find(f => f.equals(chord))) {
                   chords.push(chord);
                 }
               }
@@ -129,13 +130,46 @@ export class Song {
    * Get the real key (without the capo)
    */
   public getRealKey(): Key | null {
-    if(!this.key){
+    if (!this.key) {
       return null;
     }
 
-    if(this.capo > 0){
+    if (this.capo > 0) {
 
     }
     return null;
+  }
+
+  public clone(): Song {
+    let clonedSong = new Song();
+    clonedSong.albums = this.albums;
+    clonedSong.arrangers = this.arrangers;
+    clonedSong.artists = this.artists;
+    clonedSong.capo = this.capo;
+    clonedSong.composers = this.composers;
+    clonedSong.copyright = this.copyright;
+    clonedSong.customMetadatas = this.customMetadatas;
+    clonedSong.duration = this.duration;
+    clonedSong.lyricists = this.lyricists;
+    clonedSong.rawContent = this.rawContent;
+    clonedSong.subtitle = this.subtitle;
+    clonedSong.tempo = this.tempo;
+    clonedSong.title = this.title;
+    clonedSong.year = this.year;
+    if (this.time) {
+      clonedSong.time = { bottomNumber: this.time.bottomNumber, topNumber: this.time.topNumber }
+    }
+    if (this.key) {
+      clonedSong.key = this.key.clone();
+    }
+
+    this.userDiagrams.forEach(userDiagram => {
+      clonedSong.userDiagrams.push(userDiagram.clone());
+    });
+
+    this.sections.forEach(section => {
+      clonedSong.sections.push(section.clone());
+    });
+    return clonedSong;
   }
 }

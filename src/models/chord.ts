@@ -1,30 +1,23 @@
+import { IClonable } from "./IClonable";
 import { Key } from "./Key";
 import { MusicNote } from "./MusicNote";
 
-export class Chord {
-  private _key: Key;
-  public get key(): Key {
-    return this._key;
-  }
-
-  private _type: string;
-  public get type(): string {
-    return this._type;
-  }
-
-  private _bass: MusicNote | null;
-  public get bass(): MusicNote | null {
-    return this._bass;
-  }
+export class Chord implements IClonable<Chord>{
+  key: Key;
+  type: string;
+  bass: MusicNote | null;
 
   constructor(
     note: Key,
     type: string = "",
     bass: MusicNote | null = null
   ) {
-    this._key = note;
-    this._type = type;
-    this._bass = bass;
+    this.key = note;
+    this.type = type;
+    this.bass = bass;
+  }
+  clone(): Chord {
+    return new Chord(this.key.clone(), this.type, this.bass?.clone());
   }
 
   private static readonly chordRegex = /^(?<note>[A-G](#{1,2}|b{1,2}|x)?(min|m(?!aj)|-)?)(?<type>(?!\/).*?)?(?:$|(?:\/(?<bass>[A-G](#{1,2}|b{1,2}|x)?)))$/;
@@ -55,12 +48,12 @@ export class Chord {
    * Get the string description of the chord
    */
   public toString(showType:boolean = true, showBass:boolean = true): string {
-    var name = this._key.toString();
+    var name = this.key.toString();
     if(showType){
-      name += this._type;
+      name += this.type;
     }
-    if (showBass && this._bass) {
-      name += "/" + this._bass.toString();
+    if (showBass && this.bass) {
+      name += "/" + this.bass.toString();
     }
     return name;
   }

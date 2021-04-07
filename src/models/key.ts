@@ -1,19 +1,16 @@
+import { IClonable } from "./IClonable";
 import { MusicAccidental, MusicNote } from "./MusicNote";
 
-export class Key {
-  private _note: MusicNote;
-  public get note(): MusicNote {
-    return this._note;
-  }
-
-  private _mode: KeyMode;
-  public get mode(): KeyMode {
-    return this._mode;
-  }
+export class Key implements IClonable<Key> {
+  note: MusicNote;
+  mode: KeyMode;
 
   constructor(note: MusicNote, mode: KeyMode = KeyMode.Major) {
-    this._note = note;
-    this._mode = mode;
+    this.note = note;
+    this.mode = mode;
+  }
+  clone(): Key {
+    return new Key(this.note.clone(), this.mode);
   }
 
   public static parse(text: string): Key | undefined {
@@ -40,7 +37,7 @@ export class Key {
    * Get the string description of the key
    */
   public toString(): string {
-    return this._note.toString() + (this._mode == KeyMode.Major ? "" : "m");
+    return this.note.toString() + (this.mode == KeyMode.Major ? "" : "m");
   }
 }
 

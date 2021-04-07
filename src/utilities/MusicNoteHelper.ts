@@ -39,10 +39,14 @@ export abstract class MusicNoteHelper {
     
     public static transpose(note: MusicNote, letterDiff: number, semiTones: number): MusicNote {
         const noteValues = this.notes.find((f) => f.letter == note.letter)!;
-        const newLetterIndex = (((noteValues.index + letterDiff) % 7) + 7) % 7;
+        const newLetterIndex = this.positiveMod(noteValues.index + letterDiff,7);
         const newNoteValues = this.notes[newLetterIndex];
-        const newAccidentalValue = semiTones - (newNoteValues.value - noteValues.value);
+        const newAccidentalValue = semiTones - this.positiveMod(newNoteValues.value - noteValues.value, 11);
         const newAccidental = this.accidentals.find((f) => f.value == newAccidentalValue)!.accidental;
         return new MusicNote(newNoteValues.letter, newAccidental);
+    }
+
+    private static positiveMod(value:number, mod:number){
+        return ((value%mod) + mod)%mod;
     }
 }

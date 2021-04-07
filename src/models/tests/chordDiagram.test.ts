@@ -1,6 +1,6 @@
-import { Chord } from "../../models/Chord";
-import { ChordDiagram } from "../../models/ChordDiagram";
-import { MusicLetter, MusicNote } from "../../models/MusicNote";
+import { Chord } from "../Chord";
+import { ChordDiagram } from "../ChordDiagram";
+import { MusicLetter, MusicNote } from "../MusicNote";
 import { Key } from "../Key";
 
 test("has barre in 3rd", () => {

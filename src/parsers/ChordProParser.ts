@@ -1,8 +1,8 @@
 import { Line, LyricsLine, CommentLine, EmptyLine, CustomLine, TabLine } from "../models/lines";
 import { Key, ChordLyricsPair, ChordDiagram, Song, Chord } from "../models";
 import { Section, SectionType, Lyrics, LyricsBase, LyricsType, SimpleLyrics, Tabs } from "../models/sections";
-import { ParserWarning } from "./parserWarning";
-import { Tag, TagType } from "./tag";
+import { ParserWarning } from "./ParserWarning";
+import { Tag, TagType } from "./Tag";
 import { TagConstants } from "./TagConstants";
 
 export class ChordProParser {

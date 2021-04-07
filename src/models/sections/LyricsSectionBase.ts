@@ -9,7 +9,7 @@ export enum LyricsType {
   None = "none",
 }
 
-export abstract class LyricsBase extends Section {
+export abstract class LyricsSectionBase extends Section {
   /**
    * Getter type
    * @return Section's type

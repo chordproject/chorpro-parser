@@ -1,6 +1,9 @@
 import { Line, LineType } from "./Line";
 
 export class TabLine extends Line {
+  clone(): Line {
+    return new TabLine(this.value);
+  }
   /**
    * Getter value
    * @return {string}

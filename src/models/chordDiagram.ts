@@ -1,6 +1,7 @@
 import { Chord } from "./Chord";
+import { IClonable } from "./IClonable";
 
-export class ChordDiagram {
+export class ChordDiagram implements IClonable<ChordDiagram> {
   private readonly _chord: Chord;
   public get chord(): Chord {
     return this._chord;
@@ -31,6 +32,9 @@ export class ChordDiagram {
     this._frets = frets;
     this._fingers = fingers;
     this._variation = variation;
+  }
+  clone(): ChordDiagram {
+    return new ChordDiagram(this._chord.clone(), [...this._frets], [...this._fingers], this.variation);
   }
 
   /**

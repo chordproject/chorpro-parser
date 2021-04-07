@@ -1,6 +1,9 @@
 import { Line, LineType } from "./Line";
 
 export class CommentLine extends Line {
+  clone(): Line {
+    return new CommentLine(this._comment);
+  }
   /**
    * Getter comment
    * @return The comment's text

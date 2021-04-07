@@ -1,10 +1,19 @@
-import { Chord, Key, MusicNote, Song } from "../models";
+import { Key, MusicNote, Song } from "../models";
 import { LyricsLine } from "../models/lines";
-import { LyricsBase, SectionType } from "../models/sections";
+import { SectionType } from "../models/sections";
+import { MusicNoteHelper } from "../utilities/MusicNoteHelper";
 
 export class Transformer {
-    public transpose(song: Song, newKey: MusicNote, steps: number): Song {
-        song.sections.forEach((section, sectionIndex) => {
+    public transpose(song: Song, newKey: MusicNote): Song {
+        let newSong = song.clone();
+        if(!newSong.key){
+            return song;
+        }
+        
+        const letterDiff = MusicNoteHelper.letterDiff(newSong.key.note.letter, newKey.letter);
+        const semiTones = MusicNoteHelper.semiTonesBetween(newSong.key.note, newKey);
+        newSong.key.note = newKey;
+        newSong.sections.forEach((section, sectionIndex) => {
             if (section.sectionType != SectionType.Lyrics) {
                 return;
             }
@@ -12,19 +21,18 @@ export class Transformer {
                 if (line instanceof LyricsLine) {
                     line.pairs.forEach((pair, pairIndex) => {
                         if (pair.chord) {
-                            (<LyricsLine>song.sections[sectionIndex].lines[lineIndex]).pairs[
+                            const note = MusicNoteHelper.transpose(pair.chord.key.note, letterDiff, semiTones);
+                            const newChord = pair.chord;
+                            newChord.key.note = note;
+                            (<LyricsLine>newSong.sections[sectionIndex].lines[lineIndex]).pairs[
                                 pairIndex
-                            ].chord = this.transposeChord(pair.chord, newKey, steps);
+                            ].chord = newChord;
                         }
                     });
                 }
             });
         });
 
-        return song;
-    }
-
-    private transposeChord(chord: Chord, newKey: MusicNote, steps: number): Chord {
-        
+        return newSong;
     }
 }

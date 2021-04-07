@@ -99,11 +99,8 @@ export class Song implements IClonable<Song> {
 
   sections: Section[] = [];
 
-  /**
-   * Get the list of the song's unique chords
-   * @returns Array of unique chords
-   */
-  public getUniqueChords(): Chord[] {
+
+  private getAllChords() {
     let chords: Chord[] = []
     this.sections.forEach((section) => {
       if (section instanceof LyricsBase) {
@@ -114,9 +111,7 @@ export class Song implements IClonable<Song> {
             lyricsLine.pairs.forEach(pair => {
               if (pair.hasChord()) {
                 const chord = pair.chord!;
-                if (!chords.find(f => f.equals(chord))) {
                   chords.push(chord);
-                }
               }
             });
           }
@@ -127,18 +122,23 @@ export class Song implements IClonable<Song> {
   }
 
   /**
-   * Get the real key (without the capo)
+   * Get the list of the song's unique chords
+   * @returns Array of unique chords
    */
-  public getRealKey(): Key | null {
-    if (!this.key) {
-      return null;
-    }
-
-    if (this.capo > 0) {
-
-    }
-    return null;
+  public getUniqueChords(): Chord[] {
+    const chords = this.getAllChords();
+    let uniqueChords:Chord[] = [];
+    chords.forEach(chord => {
+      if (!uniqueChords.find(f => f.equals(chord))) {
+        uniqueChords.push(chord);
+      }
+    });
+    return uniqueChords;
   }
+
+  // public getPossibleKey(): Key {
+      
+  // }
 
   public clone(): Song {
     let clonedSong = new Song();

@@ -6,13 +6,14 @@ import { MusicNoteHelper } from "../utilities/MusicNoteHelper";
 export class Transformer {
     public transpose(song: Song, newKey: MusicNote): Song {
         let newSong = song.clone();
-        if(!newSong.key){
+        let songKey = newSong.key? newSong.key: newSong.getPossibleKey();
+        if(!songKey){
             return song;
         }
         
-        const letterDiff = MusicNoteHelper.letterDiff(newSong.key.note.letter, newKey.letter);
-        const semiTones = MusicNoteHelper.semiTonesBetween(newSong.key.note, newKey);
-        newSong.key.note = newKey;
+        const letterDiff = MusicNoteHelper.letterDiff(songKey.note.letter, newKey.letter);
+        const semiTones = MusicNoteHelper.semiTonesBetween(songKey.note, newKey);
+        songKey.note = newKey;
         newSong.sections.forEach((section, sectionIndex) => {
             if (section.sectionType != SectionType.Lyrics) {
                 return;

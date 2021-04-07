@@ -1,5 +1,5 @@
 import { IClonable } from "./IClonable";
-import { MusicAccidental, MusicNote } from "./MusicNote";
+import { MusicNote } from "./MusicNote";
 
 export class Key implements IClonable<Key> {
   note: MusicNote;
@@ -38,6 +38,10 @@ export class Key implements IClonable<Key> {
    */
   public toString(): string {
     return this.note.toString() + (this.mode == KeyMode.Major ? "" : "m");
+  }
+
+  public equals(key:Key): boolean {
+    return this.toString() == key.toString();
   }
 }
 

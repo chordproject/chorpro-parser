@@ -154,24 +154,29 @@ export class Song implements IClonable<Song> {
         if (firstKey.equals(lastKey)) {
             return firstKey.clone();
         }
-        
-        const countChords: {count:number, key:Key}[] = [];
-        chords.forEach(chord => {
-          let foundChord = countChords.find(c => c.key.equals(chord.key));
-          if(foundChord){
-            foundChord.count++;
-          }else{
-            countChords.push({count:0,key:chord.key.clone()})
-          }
-        });
-        countChords.sort(c => c.count);
-        let countFirstChord = countChords.find(c => c.key.equals(firstKey))!.count;
-        let countLastChord = countChords.find(c => c.key.equals(lastKey))!.count;
 
-        if(countFirstChord > countLastChord){
-          return firstKey.clone();
-        } else{
-          return lastKey.clone();
+        let countChords: { count: number; key: Key }[] = [];
+        chords.forEach((chord) => {
+            let foundChord = countChords.find((c) => c.key.equals(chord.key));
+            if (foundChord) {
+                foundChord.count++;
+            } else {
+                countChords.push({ count: 0, key: chord.key.clone() });
+            }
+        });
+
+        countChords.sort((c, c2) => c2.count - c.count);
+        let topChord = countChords[0];
+        let countFirstChord = countChords.find((c) => c.key.equals(firstKey))!.count;
+        let countLastChord = countChords.find((c) => c.key.equals(lastKey))!.count;
+
+        if (topChord.count > countFirstChord && topChord.count > countLastChord) {
+            return topChord.key.clone();
+        }
+        if (countFirstChord > countLastChord) {
+            return firstKey.clone();
+        } else {
+            return lastKey.clone();
         }
     }
 

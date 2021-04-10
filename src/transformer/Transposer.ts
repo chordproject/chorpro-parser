@@ -3,8 +3,8 @@ import { LyricsLine } from "../models/lines";
 import { SectionType } from "../models/sections";
 import { MusicNoteHelper } from "../utilities/MusicNoteHelper";
 
-export class Transformer {
-    public transpose(song: Song, newKey: MusicNote): Song {
+export abstract class Transposer {
+    public static transpose(song: Song, newKey: MusicNote): Song {
         let newSong = song.clone();
         let songKey = newSong.key? newSong.key: newSong.getPossibleKey();
         if(!songKey){

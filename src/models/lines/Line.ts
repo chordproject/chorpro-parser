@@ -6,7 +6,7 @@ export enum LineType {
     Empty = "empty",
     Custom = "custom",
     Tabs = "tabs",
-    Unknown = "unknown"
+    Unknown = "unknown",
 }
 
 export abstract class Line implements IClonable<Line> {
@@ -18,10 +18,9 @@ export abstract class Line implements IClonable<Line> {
     /**
      * Abstract class Line's constructor
      */
-    constructor(lineType:LineType) {
-        this._lineType = 
-        lineType;
+    constructor(lineType: LineType) {
+        this._lineType = lineType;
     }
 
-    abstract clone():Line;
+    abstract clone(): Line;
 }

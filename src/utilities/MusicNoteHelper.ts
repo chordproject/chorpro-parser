@@ -41,8 +41,8 @@ export abstract class MusicNoteHelper {
 
     /**
      * Calculate the difference between 2 letters
-     * @param firstLetter 
-     * @param secondLetter 
+     * @param firstLetter
+     * @param secondLetter
      * @returns The difference (always a positive value)
      */
     public static letterDiff(firstLetter: MusicLetter, secondLetter: MusicLetter): number {
@@ -67,7 +67,7 @@ export abstract class MusicNoteHelper {
 
         // get the note values
         const noteValues = this.notes.find((f) => f.letter == note.letter)!;
-        
+
         // get the new letter values
         let newNoteIndex = (noteValues.index + letterDiff) % 7;
         let newNoteValues = this.notes[newNoteIndex];
@@ -79,9 +79,9 @@ export abstract class MusicNoteHelper {
         // check if the semitones are not greater than 2 (3# or 3b)
         // in this case, we will replace the letter by the one below (or above)
         // we will not use triple # or b
-        if(Math.abs(semiTonesDiff) > 2){
+        if (Math.abs(semiTonesDiff) > 2) {
             if (semiTonesDiff < 0) {
-                newNoteIndex = this.positiveMod(--newNoteIndex, 7); 
+                newNoteIndex = this.positiveMod(--newNoteIndex, 7);
             } else {
                 newNoteIndex = this.positiveMod(++newNoteIndex, 7);
             }

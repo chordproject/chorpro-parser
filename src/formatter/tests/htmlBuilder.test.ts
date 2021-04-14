@@ -181,11 +181,7 @@ test("format lyrics line without chords", () => {
 });
 
 test("format lyrics line", () => {
-    let pairs = [
-        new ChordLyricsPair("Test ", null),
-        new ChordLyricsPair("Test ", Chord.parse("Am")),
-        new ChordLyricsPair("Test", null, "abc"),
-    ];
+    let pairs = [new ChordLyricsPair("Test ", null), new ChordLyricsPair("Test ", Chord.parse("Am")), new ChordLyricsPair("Test", null, "abc")];
     let line = new LyricsLine(pairs);
     const result = _builder.lyricsLine(line);
     const expected = `<div class="row lyrics-line"><div class="column"><div class="lyrics">Test </div></div><div class="column"><div class="chord">Am</div><div class="lyrics">Test </div></div><div class="column"><div class="annotation">abc</div><div class="lyrics">Test</div></div></div>`;

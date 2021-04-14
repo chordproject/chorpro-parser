@@ -1,4 +1,3 @@
-import { settings } from "node:cluster";
 import { Song } from "../models";
 import { EmptyLine, LyricsLine, TabLine } from "../models/lines";
 import { SectionType } from "../models/sections";
@@ -17,20 +16,16 @@ export class Formatter implements IFormatter {
     }
 
     format(song: Song): string[] {
-        if(this._settings.showMetadata){
+        if (this._settings.showMetadata) {
             this.formatMetadata(song);
         }
 
-        if (
-            song.sections.length > 0 &&
-            song.sections[0].lines.length > 0 &&
-            !(song.sections[0].lines[0] instanceof EmptyLine)
-        ) {
+        if (song.sections.length > 0 && song.sections[0].lines.length > 0 && !(song.sections[0].lines[0] instanceof EmptyLine)) {
             this._lines.push(...this._builder.emptyLine());
         }
 
         song.sections.forEach((section) => {
-            if(!this._settings.showTabs && section.sectionType == SectionType.Tabs){
+            if (!this._settings.showTabs && section.sectionType == SectionType.Tabs) {
                 return;
             }
 
@@ -50,7 +45,7 @@ export class Formatter implements IFormatter {
         return this._lines;
     }
 
-    private formatMetadata(song:Song){
+    private formatMetadata(song: Song) {
         if (song.title?.trim()) {
             this._lines.push(...this._builder.titleMetadata(song.title));
         }
@@ -61,24 +56,16 @@ export class Formatter implements IFormatter {
             this._lines.push(...this._builder.artistsMetadata(song.artists));
         }
         if (song.composers.length > 0) {
-            this._lines.push(
-                ...this._builder.composersMetadata(song.composers)
-            );
+            this._lines.push(...this._builder.composersMetadata(song.composers));
         }
         if (song.lyricists.length > 0) {
-            this._lines.push(
-                ...this._builder.lyricistsMetadata(song.lyricists)
-            );
+            this._lines.push(...this._builder.lyricistsMetadata(song.lyricists));
         }
         if (song.arrangers.length > 0) {
-            this._lines.push(
-                ...this._builder.arrangersMetadata(song.arrangers)
-            );
+            this._lines.push(...this._builder.arrangersMetadata(song.arrangers));
         }
         if (song.copyright?.trim()) {
-            this._lines.push(
-                ...this._builder.copyrightMetadata(song.copyright)
-            );
+            this._lines.push(...this._builder.copyrightMetadata(song.copyright));
         }
         if (song.time) {
             this._lines.push(...this._builder.timeMetadata(`${song.time.topNumber}/${song.time.bottomNumber}`));
@@ -99,9 +86,7 @@ export class Formatter implements IFormatter {
             this._lines.push(...this._builder.capoMetadata(song.capo));
         }
         if (song.customMetadatas.length > 0) {
-            this._lines.push(
-                ...this._builder.customMetadatas(song.customMetadatas)
-            );
+            this._lines.push(...this._builder.customMetadatas(song.customMetadatas));
         }
     }
 }

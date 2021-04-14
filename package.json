@@ -1,43 +1,45 @@
 {
-	"name": "chordproject-parser",
-	"version": "0.1.1",
-	"main": "dist/chordproject-parser.bundle.js",
-	"description": "A TypeScript library for parsing and formatting ChordPro songs.",
-	"engines": {
-		"node": ">=4.2.4"
-	},
-	"keywords": [
-		"chordpro",
-		"chordproject",
-		"parser",
-		"chord",
-		"guitar"
-	],
-	"author": "Miguel Forget (http://chordproject.com)",
-	"scripts": {
-		"start": "webpack serve --config webpack.dev.js",
-		"build": "webpack --config webpack.prod.js",
-		"publish": "npm publish",
-		"test": "npx jest --runInBand --detectOpenHandles --colors --verbose --reporters=default",
-		"test:ci": "npx jest --ci --runInBand --silent --colors --coverage"
-	},
-	"devDependencies": {
-		"@types/jest": "^26.0.20",
-		"@types/node": "^14.14.31",
-		"clean-webpack-plugin": "^3.0.0",
-		"css-loader": "^5.2.0",
-		"html-webpack-plugin": "^5.2.0",
-		"jest": "^26.6.3",
-		"style-loader": "^2.0.0",
-		"ts-jest": "^26.5.2",
-		"ts-loader": "^8.0.17",
-		"typescript": "^4.2.2",
-		"webpack": "^5.24.2",
-		"webpack-cli": "^4.5.0",
-		"webpack-dev-server": "^3.11.2"
-	},
-	"dependencies": {
-		"@types/jquery": "^3.5.5",
-		"clone": "^2.1.2"
-	}
+    "name": "chordproject-parser",
+    "version": "0.1.6",
+    "main": "dist/chordproject-parser.bundle.js",
+    "typings": "dist/index",
+    "files": [
+        "dist"
+    ],
+    "description": "A TypeScript library for parsing and formatting ChordPro songs.",
+    "engines": {
+        "node": ">=4.2.4"
+    },
+    "keywords": [
+        "chordpro",
+        "chordproject",
+        "parser",
+        "chord",
+        "guitar"
+    ],
+    "author": "Miguel Forget (http://chordproject.com)",
+    "scripts": {
+        "start": "webpack serve --config webpack.dev.js",
+        "build": "webpack --config webpack.prod.js",
+        "release": "npm run build && npm publish",
+        "test": "npx jest --runInBand --detectOpenHandles --colors --verbose --reporters=default",
+        "test:ci": "npx jest --ci --runInBand --silent --colors --coverage"
+    },
+    "devDependencies": {
+        "@types/jest": "^26.0.20",
+        "@types/node": "^14.14.31",
+        "clean-webpack-plugin": "^3.0.0",
+        "html-webpack-plugin": "^5.2.0",
+        "jest": "^26.6.3",
+        "ts-jest": "^26.5.2",
+        "ts-loader": "^8.0.17",
+        "typescript": "^4.2.2",
+        "webpack": "^5.24.2",
+        "webpack-cli": "^4.5.0",
+        "webpack-dev-server": "^3.11.2"
+    },
+    "dependencies": {
+        "@types/jquery": "^3.5.5",
+        "clone": "^2.1.2"
+    }
 }

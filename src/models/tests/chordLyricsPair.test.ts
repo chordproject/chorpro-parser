@@ -17,11 +17,11 @@ test("parse lyrics with text chord", () => {
     expect(result).toBeDefined();
     expect(result[1].text).toEqual("Rit");
     expect(result[1].lyrics).toEqual("I will not let anything");
-})
+});
 
 test("parse lyrics without chords", () => {
     const text = "I will not let anything";
     const result = ChordLyricsPair.parse(text);
     expect(result).toBeDefined();
     expect(result[1].lyrics).toEqual(text);
-})
+});

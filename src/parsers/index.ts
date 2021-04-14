@@ -1,2 +1,2 @@
-export {ChordProParser} from "./ChordProParser"
-export {ParserWarning} from "./ParserWarning"
+export { ChordProParser } from "./ChordProParser";
+export { ParserWarning } from "./ParserWarning";

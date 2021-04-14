@@ -92,11 +92,15 @@ Essentially, it looks like this:
 ```
 
 ## Unit test
+
 You can add tests in the tests directory and execute them with
+
 ```sh
 $ npm run test
 ```
+
 or for the coverage
+
 ```sh
 $ npm run test:ci
 ```

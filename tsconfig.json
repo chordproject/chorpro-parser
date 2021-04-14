@@ -1,19 +1,20 @@
 {
-	"compilerOptions": {
-		"outDir": "./dist",
-		"target": "ES6",
-		"allowSyntheticDefaultImports": true,
-		"noImplicitAny": true,
-		"removeComments": true,
-		"preserveConstEnums": true,
-		"sourceMap": true,
-		"strictNullChecks": true,
-		"strict": true,
-		"allowJs": false,
-		"moduleResolution": "node",
-		"resolveJsonModule": true,
-		"module": "ESNext"
-	},
-	"include": ["./src/**/*"],
-	"exclude": ["node_modules", "**/*.spec.ts"]
+    "compilerOptions": {
+        "outDir": "./dist",
+        "target": "ES6",
+        "allowSyntheticDefaultImports": true,
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "strictNullChecks": true,
+        "strict": true,
+        "allowJs": false,
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "module": "ESNext",
+        "declaration": true
+    },
+    "include": ["./src/**/*"],
+    "exclude": ["node_modules", "**/*.spec.ts"]
 }

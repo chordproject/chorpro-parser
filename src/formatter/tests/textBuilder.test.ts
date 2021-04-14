@@ -116,13 +116,13 @@ test("format empty line", () => {
 });
 
 test("format chorus section start", () => {
-  const result = _builder.sectionStart(new Lyrics(LyricsType.Chorus, "chorus", "Chorus"));
-  expect(result).toEqual(["Chorus"]);
+    const result = _builder.sectionStart(new Lyrics(LyricsType.Chorus, "chorus", "Chorus"));
+    expect(result).toEqual(["Chorus"]);
 });
 
 test("format chorus section end", () => {
-  const result = _builder.sectionEnd(new Lyrics(LyricsType.Chorus, "chorus", "Chorus"));
-  expect(result).toEqual([]);
+    const result = _builder.sectionEnd(new Lyrics(LyricsType.Chorus, "chorus", "Chorus"));
+    expect(result).toEqual([]);
 });
 
 test("format lyrics line without chords", () => {
@@ -134,11 +134,7 @@ test("format lyrics line without chords", () => {
 });
 
 test("format lyrics line", () => {
-    let pairs = [
-        new ChordLyricsPair("Test ", null),
-        new ChordLyricsPair("Test ", Chord.parse("Am")),
-        new ChordLyricsPair("Test", null, "abc"),
-    ];
+    let pairs = [new ChordLyricsPair("Test ", null), new ChordLyricsPair("Test ", Chord.parse("Am")), new ChordLyricsPair("Test", null, "abc")];
     let line = new LyricsLine(pairs);
     const expectedFirstLine = `${" ".repeat(5)}Am${" ".repeat(3)}abc`;
     const expectedSecondLine = "Test Test Test";
@@ -147,11 +143,7 @@ test("format lyrics line", () => {
 });
 
 test("format lyrics line with lyrics shorter than chords", () => {
-    let pairs = [
-        new ChordLyricsPair("Test ", null),
-        new ChordLyricsPair("Test ", Chord.parse("Am7sus4")),
-        new ChordLyricsPair("Test", null, "abc"),
-    ];
+    let pairs = [new ChordLyricsPair("Test ", null), new ChordLyricsPair("Test ", Chord.parse("Am7sus4")), new ChordLyricsPair("Test", null, "abc")];
     let line = new LyricsLine(pairs);
     const expectedFirstLine = `${" ".repeat(5)}Am7sus4 abc`;
     const expectedSecondLine = "Test Test    Test";
@@ -160,7 +152,7 @@ test("format lyrics line with lyrics shorter than chords", () => {
 });
 
 test("format tab line", () => {
-  const line = "e|--1--|";
-  const result = _builder.tabLine(new TabLine(line));
-  expect(result).toEqual([line]);
+    const line = "e|--1--|";
+    const result = _builder.tabLine(new TabLine(line));
+    expect(result).toEqual([line]);
 });

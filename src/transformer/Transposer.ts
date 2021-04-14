@@ -6,11 +6,11 @@ import { MusicNoteHelper } from "../utilities/MusicNoteHelper";
 export abstract class Transposer {
     public static transpose(song: Song, newKey: MusicNote): Song {
         let newSong = song.clone();
-        let songKey = newSong.key? newSong.key: newSong.getPossibleKey();
-        if(!songKey){
+        let songKey = newSong.key ? newSong.key : newSong.getPossibleKey();
+        if (!songKey) {
             return song;
         }
-        
+
         const letterDiff = MusicNoteHelper.letterDiff(songKey.note.letter, newKey.letter);
         const semiTones = MusicNoteHelper.semiTonesBetween(songKey.note, newKey);
         songKey.note = newKey;
@@ -25,9 +25,7 @@ export abstract class Transposer {
                             const note = MusicNoteHelper.transpose(pair.chord.key.note, letterDiff, semiTones);
                             const newChord = pair.chord;
                             newChord.key.note = note;
-                            (<LyricsLine>newSong.sections[sectionIndex].lines[lineIndex]).pairs[
-                                pairIndex
-                            ].chord = newChord;
+                            (<LyricsLine>newSong.sections[sectionIndex].lines[lineIndex]).pairs[pairIndex].chord = newChord;
                         }
                     });
                 }

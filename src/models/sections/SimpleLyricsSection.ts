@@ -4,7 +4,7 @@ import { Section } from "./Section";
 export class SimpleLyricsSection extends LyricsSectionBase {
     public clone(): Section {
         let section = new SimpleLyricsSection();
-        this._lines.forEach(line => {
+        this._lines.forEach((line) => {
             section.addLine(line.clone());
         });
         return section;
@@ -13,6 +13,4 @@ export class SimpleLyricsSection extends LyricsSectionBase {
     constructor() {
         super(LyricsType.None);
     }
-
-
 }

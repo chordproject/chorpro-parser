@@ -53,10 +53,9 @@ export class ChordProParser {
             this._currentLineIndex++;
         });
         this.completeCurrentSection();
-        
-        // set a possible key if none has been set
-        if(!this._song.key){
 
+        // set a possible key if none has been set
+        if (!this._song.key) {
         }
         return this._song;
     }
@@ -126,9 +125,7 @@ export class ChordProParser {
                 if (!result[0]) {
                     const lyrics = result[1].lyrics.trim();
                     if (lyrics) {
-                        this.addWarning(
-                            `Cannot parse the chord '${result[1].text}' before the lyrics '${result[1].lyrics.trim()}'`
-                        );
+                        this.addWarning(`Cannot parse the chord '${result[1].text}' before the lyrics '${result[1].lyrics.trim()}'`);
                     } else {
                         this.addWarning(`Cannot parse the chord '${result[1].text}'`);
                     }
@@ -231,13 +228,11 @@ export class ChordProParser {
     private parseStartOfBlockTag(longName: string, value: string | null) {
         // check previous section is closed
         if (this._currentSectionTagName !== null) {
-            this.addWarning(
-                `The section tag ${this._currentSectionTagName} must be closed before starting a new section`
-            );
+            this.addWarning(`The section tag ${this._currentSectionTagName} must be closed before starting a new section`);
         }
 
         this.completeCurrentSection();
-		const name = longName.replace("start_of_", "");
+        const name = longName.replace("start_of_", "");
         this._currentSectionTagName = name;
         const blockType = TagConstants.START_BLOCK_TAGS.find((f) => f === longName);
 
@@ -247,7 +242,6 @@ export class ChordProParser {
             return;
         }
 
-        
         // other section
         switch (blockType) {
             case TagConstants.START_OF_BRIDGE:

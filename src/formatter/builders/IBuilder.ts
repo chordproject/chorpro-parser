@@ -27,7 +27,7 @@ export interface IBuilder {
     metadataEnd(): string[];
 
     contentStart(): string[];
-    contentEnd():string[]
+    contentEnd(): string[];
 
     sectionStart(section: Section): string[];
     sectionEnd(section: Section): string[];

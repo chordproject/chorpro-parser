@@ -1,7 +1,7 @@
 import { ChordProBuilder } from "../builders";
 import { Chord, ChordLyricsPair } from "../../models";
 import { LyricsLine, TabLine } from "../../models/lines";
-import { Lyrics,LyricsType } from "../../models/sections";
+import { Lyrics, LyricsType } from "../../models/sections";
 
 const _builder = new ChordProBuilder();
 
@@ -133,17 +133,13 @@ test("format empty line", () => {
 });
 
 test("format chorus section start", () => {
-    const result = _builder.sectionStart(
-        new Lyrics(LyricsType.Chorus, "chorus", "Chorus")
-    );
+    const result = _builder.sectionStart(new Lyrics(LyricsType.Chorus, "chorus", "Chorus"));
     const expected = "{start_of_chorus: Chorus}";
     expect(result).toEqual([expected]);
 });
 
 test("format chorus section end", () => {
-    const result = _builder.sectionEnd(
-        new Lyrics(LyricsType.Chorus, "chorus", "Chorus")
-    );
+    const result = _builder.sectionEnd(new Lyrics(LyricsType.Chorus, "chorus", "Chorus"));
     const expected = "{end_of_chorus}";
     expect(result).toEqual([expected]);
 });
@@ -157,11 +153,7 @@ test("format lyrics line without chords", () => {
 });
 
 test("format lyrics line", () => {
-    let pairs = [
-        new ChordLyricsPair("Test ", null),
-        new ChordLyricsPair("Test ", Chord.parse("Am")),
-        new ChordLyricsPair("Test", null, "abc"),
-    ];
+    let pairs = [new ChordLyricsPair("Test ", null), new ChordLyricsPair("Test ", Chord.parse("Am")), new ChordLyricsPair("Test", null, "abc")];
     let line = new LyricsLine(pairs);
     const result = _builder.lyricsLine(line);
     const expected = "Test [Am]Test [*abc]Test";

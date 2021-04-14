@@ -57,12 +57,11 @@ test("should return the C key when it's the top used chord and last chord", asyn
     expect(result!.toString()).toBe("C");
 });
 
-
 function getChords(chords: string[]): Chord[] {
     const validChords: Chord[] = [];
     chords.forEach((chord) => {
         const parsedChord = Chord.parse(chord);
-        if(parsedChord){
+        if (parsedChord) {
             validChords.push(parsedChord);
         }
     });

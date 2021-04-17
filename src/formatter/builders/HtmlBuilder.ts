@@ -1,9 +1,53 @@
 import { cpuUsage } from "node:process";
+import { stringify } from "node:querystring";
 import { LyricsLine, CommentLine, TabLine, CustomLine } from "../../models/lines";
 import { Lyrics, Section, Tabs, LyricsType } from "../../models/sections";
 import { DataHelper } from "../DataHelper";
 import { BuilderSettingsBase } from "./BuilderSettingsBase";
 import { IBuilder } from "./IBuilder";
+
+interface IPrintable {
+    toStringLines(): string[];
+}
+
+class SimplePrintable implements IPrintable {
+    value: string;
+    constructor(value: string) {
+        this.value = value;
+    }
+    toStringLines(): string[] {
+        return [this.value];
+    }
+}
+
+class HtmlElement implements IPrintable {
+    tag: string;
+    classNames: string[] = [];
+    innerHtml: IPrintable[] = [];
+
+    constructor(tag: string, classNames: string[], ...innerHtml: IPrintable[]) {
+        this.tag = tag;
+        this.innerHtml = innerHtml;
+        this.classNames = classNames;
+    }
+
+    toStringLines(): string[] {
+        const lines: string[] = [];
+        lines.push(`<${this.tag} class="${this.classNames.join(" ")}">`);
+        this.innerHtml.forEach((element) => {
+            lines.push(...element.toStringLines());
+        });
+        lines.push(`</${this.tag}>`);
+        return lines;
+    }
+
+    addElement(...element: IPrintable[]) {
+        this.innerHtml.push(...element);
+    }
+    addString(value: string) {
+        this.innerHtml.push(new SimplePrintable(value));
+    }
+}
 
 export class HtmlBuilder implements IBuilder {
     private _settings: BuilderSettingsBase;
@@ -98,26 +142,110 @@ export class HtmlBuilder implements IBuilder {
         return [this.buildHtmlElement("div", "", classNames)];
     }
 
+    private createWordElement(...innerHtml:IPrintable[]): HtmlElement {
+        let element = new HtmlElement("div", ["word"], ...innerHtml);
+        return element;
+    }
+
+    private createChordElement(chord: string, isChord: boolean): HtmlElement {
+        let classNames = ["above-lyrics"];
+        if (isChord) {
+            classNames.push("chord");
+        } else {
+            classNames.push("annotation");
+        }
+        let element = new HtmlElement("span", classNames);
+        element.addString(chord);
+        return element;
+    }
+
+    private createLyricsElement(text: string): HtmlElement {
+        let element = new HtmlElement("span", ["lyrics"]);
+        element.addString(text);
+        return element;
+    }
+
+    private createChordLyricsElement(chord: string, isChord: boolean, lyrics: string): HtmlElement {
+        let element = new HtmlElement("div", ["chord-lyrics"]);
+        element.addElement(this.createChordElement(chord, isChord));
+        element.addElement(this.createLyricsElement(lyrics));
+        return element;
+    }
+
     lyricsLine(line: LyricsLine): string[] {
-        let pairs: string[] = [];
-        line.pairs.forEach((pair) => {
-            let chordAndLyrics = "";
+        let lineElement = new HtmlElement("div", ["lyrics-line"]);
+        let previousElements: HtmlElement[] = [];
+        line.pairs.forEach((pair, index) => {
             if (this._settings.showChords) {
+                let hasTextAbove = pair.chord != null || pair.text != null;
+                let isChord = pair.chord != null;
+                let chordValue = "";
                 if (pair.chord) {
-                    let chord = this._settings.useSimpleChord ? pair.chord.toSimpleString() : pair.chord.toString();
-                    chordAndLyrics += this.buildHtmlElement("div", chord, ["chord"]);
+                    chordValue = this._settings.useSimpleChord ? pair.chord.toSimpleString() : pair.chord.toString();
                 } else if (pair.text) {
-                    chordAndLyrics += this.buildHtmlElement("div", pair.text, ["annotation"]);
+                    chordValue = pair.text;
+                }
+
+                let lyrics = hasTextAbove ? pair.lyrics : pair.lyrics.trimStart();
+                lyrics = lyrics.replace(/' '+/g, " ");
+                let words = lyrics.split(" ");
+                let firstWord = words.shift()!;
+                let lastWord = words.pop();
+
+                // first word is a space
+                if (firstWord == "") {
+                    // means that the previous chord lyrics was a word
+                    if (previousElements.length > 0) {
+                        let word = this.createWordElement(...previousElements);
+                        lineElement.addElement(word);
+                        previousElements = [];
+                    }
+                    firstWord = "&nbsp;";
+                    if (words.length > 0) {
+                        firstWord += words.shift();
+                    }
+                }
+
+                // create the first element
+                var firstElement = hasTextAbove
+                    ? this.createChordLyricsElement(chordValue, isChord, firstWord)
+                    : this.createLyricsElement(firstWord);
+                previousElements.push(firstElement);
+
+                if (lastWord == undefined && index < line.pairs.length - 1) {
+                    return;
+                }
+
+                // add the element as a word
+                let wordElement = this.createWordElement(...previousElements);
+                lineElement.addElement(wordElement);
+                previousElements = [];
+
+                // for each other words
+                words.forEach((word) => {
+                    let lyricsElement = this.createLyricsElement(word);
+                    let wordElement = this.createWordElement(lyricsElement);
+                    lineElement.addElement(wordElement);
+                });
+
+                // last word is not a space
+                if (lastWord != "" && lastWord != undefined) {
+                    previousElements.push(this.createLyricsElement(lastWord));
+                    if (index < line.pairs.length - 1) {
+                        return;
+                    }
                 }
             }
-
-            if (pair.lyrics.trim()) {
-                chordAndLyrics += this.buildHtmlElement("div", pair.lyrics, ["lyrics"]);
-            }
-            pairs.push(this.buildHtmlElement("div", chordAndLyrics, ["column"]));
         });
-        const columnsInRow = this.buildHtmlElement("div", pairs.join(""), ["row", "lyrics-line"]);
-        return [columnsInRow];
+
+        // finish the line
+        if(previousElements.length > 0){
+            let wordElement = this.createWordElement(...previousElements);
+            lineElement.addElement(wordElement);
+            previousElements = [];
+        }
+
+        return lineElement.toStringLines();
     }
 
     commentLine(line: CommentLine): string[] {
@@ -167,7 +295,10 @@ export class HtmlBuilder implements IBuilder {
     }
 
     sectionEnd(section: Section): string[] {
-        return ["</div>"];
+        if (section instanceof Lyrics || section instanceof Tabs) {
+            return ["</div>"];
+        }
+        return [];
     }
 
     metadataStart(): string[] {
@@ -185,6 +316,6 @@ export class HtmlBuilder implements IBuilder {
     }
 
     contentEnd(): string[] {
-        return ["</div>"];
+        return [`</div>`];
     }
 }

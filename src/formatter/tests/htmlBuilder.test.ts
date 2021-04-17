@@ -176,16 +176,49 @@ test("format lyrics line without chords", () => {
     let pairs = [new ChordLyricsPair("Test ", null)];
     let line = new LyricsLine(pairs);
     const result = _builder.lyricsLine(line);
-    const expected = `<div class="row lyrics-line"><div class="column"><div class="lyrics">Test </div></div></div>`;
-    expect(result).toEqual([expected]);
+    const expected = [
+        `<div class="lyrics-line">`,
+        `<div class="word">`,
+        `<span class="lyrics">`,
+        `Test`,
+        `</span>`,
+        `</div>`,
+        `</div>`,
+    ];
+    expect(result).toMatchObject(expected);
 });
 
-test("format lyrics line", () => {
-    let pairs = [new ChordLyricsPair("Test ", null), new ChordLyricsPair("Test ", Chord.parse("Am")), new ChordLyricsPair("Test", null, "abc")];
+test("format lyrics line with last chord", () => {
+    let pairs = [
+        new ChordLyricsPair(" Who is like ", Chord.parse("Am")),
+        new ChordLyricsPair("Him,", Chord.parse("Bb11"))
+    ];
     let line = new LyricsLine(pairs);
     const result = _builder.lyricsLine(line);
-    const expected = `<div class="row lyrics-line"><div class="column"><div class="lyrics">Test </div></div><div class="column"><div class="chord">Am</div><div class="lyrics">Test </div></div><div class="column"><div class="annotation">abc</div><div class="lyrics">Test</div></div></div>`;
-    expect(result).toEqual([expected]);
+    const expected = [
+        `<div class="lyrics-line">`,
+        `<div class="word">`,`<div class="chord-lyrics">`,`<span class="above-lyrics chord">`,`Am`,`</span>`,`<span class="lyrics">`,`&nbsp;Who`,`</span>`,`</div>`,`</div>`,
+        `<div class="word">`,`<span class="lyrics">`,`is`,`</span>`,`</div>`,
+        `<div class="word">`,`<span class="lyrics">`,`like`,`</span>`,`</div>`,
+        `<div class="word">`,`<div class="chord-lyrics">`,`<span class="above-lyrics chord">`,`Bb11`,`</span>`,`<span class="lyrics">`,`Him,`,`</span>`,`</div>`,`</div>`,
+        `</div>`
+    ];
+    expect(result).toMatchObject(expected);
+});
+
+test("format complexe lyrics line", () => {
+    let pairs = [
+        new ChordLyricsPair(" ", Chord.parse("C")),
+        new ChordLyricsPair("Ima", null),
+        new ChordLyricsPair("gine all the peo", Chord.parse("Am")),
+        new ChordLyricsPair("ple ", Chord.parse("G")),
+        new ChordLyricsPair("sharing all the world", Chord.parse("F")),
+    ];
+    let line = new LyricsLine(pairs);
+    const result = _builder.lyricsLine(line);
+    const expected = `<div class="lyrics-line"><div class="word"><div class="chord-lyrics"><span class="above-lyrics chord">C</span><span class="lyrics">&nbsp;</span></div></div><div class="word"><span class="lyrics">Ima</span><div class="chord-lyrics"><span class="above-lyrics chord">Am</span><span class="lyrics">gine</span></div></div><div class="word"><span class="lyrics">all</span></div><div class="word"><span class="lyrics">the</span></div><div class="word"><span class="lyrics">peo</span><div class="chord-lyrics"><span class="above-lyrics chord">G</span><span class="lyrics">ple</span></div></div><div class="word"><div class="chord-lyrics"><span class="above-lyrics chord">F</span><span class="lyrics">sharing</span></div></div><div class="word"><span class="lyrics">all</span></div><div class="word"><span class="lyrics">the</span></div><div class="word"><span class="lyrics">world</span></div></div>`;
+    const html = result.join("");
+    expect(html).toEqual(expected);
 });
 
 test("format tab line", () => {

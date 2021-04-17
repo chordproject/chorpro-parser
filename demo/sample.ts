@@ -40,7 +40,7 @@ All the [Dm7] Angels and the [F]Saints
 
 const cp = new ChordProParser();
 const song = cp.parse(chordSheet);
-const transposedSong = Transposer.transpose(song, new MusicNote(MusicLetter.G, MusicAccidental.none));
+const transposedSong = Transposer.transpose(song, new MusicNote(MusicLetter.D, MusicAccidental.bb));
 console.log(song);
 console.log(song.getPossibleKey()?.toString());
 console.log(cp.warnings);
@@ -55,7 +55,7 @@ formatterSettings.showTabs = true;
 
 const htmlBuilder = new HtmlBuilder(settings);
 const formatter = new Formatter(htmlBuilder, formatterSettings);
-const result = formatter.format(transposedSong);
+const result = formatter.format(song);
 document.body.innerHTML = `${result.join("\n")}`
 //document.body.innerHTML = `<pre>${result.join('\n')}</pre>`;
 //document.getElementById('demo')!.innerHTML = `<pre>${result.join('\n')}</pre>`;

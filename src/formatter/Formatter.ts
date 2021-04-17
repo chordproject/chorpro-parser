@@ -19,11 +19,7 @@ export class Formatter implements IFormatter {
         if (this._settings.showMetadata) {
             this.formatMetadata(song);
         }
-
-        if (song.sections.length > 0 && song.sections[0].lines.length > 0 && !(song.sections[0].lines[0] instanceof EmptyLine)) {
-            this._lines.push(...this._builder.emptyLine());
-        }
-
+        this._lines.push(...this._builder.contentStart());
         song.sections.forEach((section) => {
             if (!this._settings.showTabs && section.sectionType == SectionType.Tabs) {
                 return;
@@ -42,10 +38,12 @@ export class Formatter implements IFormatter {
 
             this._lines.push(...this._builder.sectionEnd(section));
         });
+        this._lines.push(...this._builder.contentEnd());
         return this._lines;
     }
 
     private formatMetadata(song: Song) {
+        this._lines.push(...this._builder.metadataStart());
         if (song.title?.trim()) {
             this._lines.push(...this._builder.titleMetadata(song.title));
         }
@@ -88,5 +86,6 @@ export class Formatter implements IFormatter {
         if (song.customMetadatas.length > 0) {
             this._lines.push(...this._builder.customMetadatas(song.customMetadatas));
         }
+        this._lines.push(...this._builder.metadataEnd());
     }
 }

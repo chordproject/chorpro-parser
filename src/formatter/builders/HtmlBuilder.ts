@@ -1,5 +1,3 @@
-import { cpuUsage } from "node:process";
-import { stringify } from "node:querystring";
 import { LyricsLine, CommentLine, TabLine, CustomLine } from "../../models/lines";
 import { Lyrics, Section, Tabs, LyricsType } from "../../models/sections";
 import { DataHelper } from "../DataHelper";
@@ -187,7 +185,7 @@ export class HtmlBuilder implements IBuilder {
                 }
 
                 let lyrics = hasTextAbove ? pair.lyrics : pair.lyrics.trimStart();
-                lyrics = lyrics.replace(/' '+/g, " ");
+                lyrics = lyrics.replace(/ +/g, " ");
                 let words = lyrics.split(" ");
                 let firstWord = words.shift()!;
                 let lastWord = words.pop();

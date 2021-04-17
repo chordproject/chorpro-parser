@@ -64,8 +64,6 @@ const formatter = new HtmlFormatter(settings);
 formatter.settings.showChords = false;
 ```
 
-...then click on the http://localhost:8081/ link to open the demo in your browser
-
 ## ChordPro format: Lyrics and Chords
 
 Essentially, it looks like this:
@@ -102,6 +100,7 @@ Essentially, it looks like this:
 ```
 
 # With source code
+
 ## Demo
 
 To start the demo:
@@ -110,6 +109,7 @@ To start the demo:
 $ npm run start
 ```
 
+...then click on the http://localhost:8081/ link to open the demo in your browser
 
 ## Unit test
 

@@ -1,60 +1,70 @@
 # ChordProject Parser
 
-A TypeScript library for parsing ChordPro songs.
+A TypeScript library for parsing, transposing and formatting ChordPro songs.
 
 ## Overview
 
-Reads marked-up music (lyrics + chords) extracting all of the chords used.
+Parse any ChordPro song by using the ChordProParser.
+This gives a Song object wich can the be transposed with the Transposer and formatted with the Formatter.
+The formatter comes with 3 builders:
+
+-   TextBuilder: format as text
+-   HtmlBuilder: format as HTML (cf. style.css)
+-   ChordProBuilder: format as ChordPro
 
 #### Part of [ChordProject](https://gochord.com/)
 
 ## Usage
 
-`ChordProject Parser` is on npm, to install run:
+### Setup
+
+To install run:
 
 ```sh
 $ npm i chordproject-parser
 ```
 
-Load with `require()`:
+Load with `import`:
 
 ```typescript
-var ChordProParser = require("chordproject-parser");
+import { ChordProParser } from "chordproject-parser";
 ```
 
-or `import` (es6, typescript):
+### Parser
+
+To use the ChordProParser:
 
 ```typescript
-import * as ChordProParser from "chordproject-parser";
+const parser = new ChordProParser();
+const song = parser.parse(chordSheet);
 ```
 
-And call the Main class:
+### Formatter
 
-```javascript
-ChordProParser.parse(chordSheet);
+You can choose between 3 formatters: TextFormatter, HtmlFormatter and ChordProFormatter.
+
+```typescript
+const formatter = new HtmlFormatter();
+const songText = formatter.format(song);
 ```
 
-## Demo
+The formatters have default settings. You can change pass the settings in the formatter's constructor or change the settings later.
+Here is an example:
 
-Open demo/index.html on the browser to see a webpage example.
-
-You can also modify the sources to see changes:
-
-1.  Clone
-2.  Install dependencies
-
-```sh
-$ npm i
+```typescript
+const settings = new FormatterSettings();
+settings.showChords = false;
+const formatter = new HtmlFormatter(settings);
 ```
 
-3.  Change the songText input in demo/sample.js (Or any source file in src)
-4.  Bundle files with webpack (the output will be in dist folder)
+or simply
 
-```sh
-$ npm run build
+```typescript
+const formatter = new HtmlFormatter(settings);
+formatter.settings.showChords = false;
 ```
 
-5.  Open again demo/index.html to see the result!
+...then click on the http://localhost:8081/ link to open the demo in your browser
 
 ## ChordPro format: Lyrics and Chords
 
@@ -91,6 +101,16 @@ Essentially, it looks like this:
     {end_of_chorus}
 ```
 
+# With source code
+## Demo
+
+To start the demo:
+
+```sh
+$ npm run start
+```
+
+
 ## Unit test
 
 You can add tests in the tests directory and execute them with
@@ -104,5 +124,3 @@ or for the coverage
 ```sh
 $ npm run test:ci
 ```
-
-## Contribute

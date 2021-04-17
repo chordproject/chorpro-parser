@@ -1,4 +1,4 @@
-export * from "./parsers";
+export { ChordProParser } from "./parsers";
 export { Transposer } from "./transformer/Transposer";
 export { ChordDiagramCollection } from "./ChordDiagramCollection";
-export * from "./formatter";
+export { ChordProFormatter, HtmlFormatter, TextFormatter } from "./formatter";

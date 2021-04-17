@@ -1,17 +1,14 @@
 import { CommentLine, CustomLine, LyricsLine, TabLine } from "../../models/lines";
 import { Tabs, Section, Lyrics } from "../../models/sections";
 import { DataHelper } from "../DataHelper";
-import { BuilderSettingsBase } from "./BuilderSettingsBase";
+import { BuilderSettings } from "./BuilderSettings";
 import { IBuilder } from "./IBuilder";
 
 export class TextBuilder implements IBuilder {
-    private _settings: BuilderSettingsBase;
+    settings: BuilderSettings;
 
-    /**
-     *
-     */
-    constructor(settings: BuilderSettingsBase = new BuilderSettingsBase()) {
-        this._settings = settings;
+    constructor(settings: BuilderSettings = new BuilderSettings()) {
+        this.settings = settings;
     }
 
     private writeMetadata(label: string, metadata: string | null): string {
@@ -97,9 +94,9 @@ export class TextBuilder implements IBuilder {
         let lines: string[] = [];
         line.pairs.forEach((pair) => {
             let spacesCount = 1;
-            if (this._settings.showChords) {
+            if (this.settings.showChords) {
                 if (pair.chord) {
-                    let chord = this._settings.useSimpleChord ? pair.chord.toSimpleString() : pair.chord.toString();
+                    let chord = this.settings.useSimpleChord ? pair.chord.toSimpleString() : pair.chord.toString();
                     firstLine += chord;
                     spacesCount = pair.lyrics.length - chord.length;
                 } else if (pair.text) {

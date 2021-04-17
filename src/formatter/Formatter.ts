@@ -2,26 +2,25 @@ import { Song } from "../models";
 import { EmptyLine, LyricsLine, TabLine } from "../models/lines";
 import { SectionType } from "../models/sections";
 import { IBuilder } from "./builders";
-import { FormatterSettings } from "./FormatterSettings";
+import { FormatterSettingsBase } from "./FormatterSettingsBase";
 import { IFormatter } from "./IFormatter";
 
-export class Formatter implements IFormatter {
+export abstract class Formatter implements IFormatter {
     private _builder: IBuilder;
     private _lines: string[] = [];
-    private _settings: FormatterSettings;
+    abstract settings: FormatterSettingsBase;
 
-    constructor(builder: IBuilder, settings: FormatterSettings = new FormatterSettings()) {
+    constructor(builder: IBuilder) {
         this._builder = builder;
-        this._settings = settings;
     }
 
     format(song: Song): string[] {
-        if (this._settings.showMetadata) {
+        if (this.settings.showMetadata) {
             this.formatMetadata(song);
         }
         this._lines.push(...this._builder.contentStart());
         song.sections.forEach((section) => {
-            if (!this._settings.showTabs && section.sectionType == SectionType.Tabs) {
+            if (!this.settings.showTabs && section.sectionType == SectionType.Tabs) {
                 return;
             }
 

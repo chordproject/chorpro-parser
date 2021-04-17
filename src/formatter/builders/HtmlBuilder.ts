@@ -1,7 +1,7 @@
 import { LyricsLine, CommentLine, TabLine, CustomLine } from "../../models/lines";
 import { Lyrics, Section, Tabs, LyricsType } from "../../models/sections";
 import { DataHelper } from "../DataHelper";
-import { BuilderSettingsBase } from "./BuilderSettingsBase";
+import { BuilderSettings } from "./BuilderSettings";
 import { IBuilder } from "./IBuilder";
 
 interface IPrintable {
@@ -48,10 +48,10 @@ class HtmlElement implements IPrintable {
 }
 
 export class HtmlBuilder implements IBuilder {
-    private _settings: BuilderSettingsBase;
+    settings: BuilderSettings;
 
-    constructor(settings: BuilderSettingsBase = new BuilderSettingsBase()) {
-        this._settings = settings;
+    constructor(settings: BuilderSettings = new BuilderSettings()) {
+        this.settings = settings;
     }
 
     protected buildHtmlElement(tag: string, value: string, classNames: string[] = []): string {
@@ -174,12 +174,12 @@ export class HtmlBuilder implements IBuilder {
         let lineElement = new HtmlElement("div", ["lyrics-line"]);
         let previousElements: HtmlElement[] = [];
         line.pairs.forEach((pair, index) => {
-            if (this._settings.showChords) {
+            if (this.settings.showChords) {
                 let hasTextAbove = pair.chord != null || pair.text != null;
                 let isChord = pair.chord != null;
                 let chordValue = "";
                 if (pair.chord) {
-                    chordValue = this._settings.useSimpleChord ? pair.chord.toSimpleString() : pair.chord.toString();
+                    chordValue = this.settings.useSimpleChord ? pair.chord.toSimpleString() : pair.chord.toString();
                 } else if (pair.text) {
                     chordValue = pair.text;
                 }

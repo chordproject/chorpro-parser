@@ -1,5 +1,5 @@
-import { Formatter, ChordProParser, HtmlBuilder, TextBuilder, Transposer } from '../src';
-import { BuilderSettingsBase } from '../src/formatter/builders/BuilderSettingsBase';
+import { ChordProParser, Transposer } from '../src';
+import { ChordProFormatter, HtmlFormatter } from '../src/formatter';
 import { FormatterSettings } from '../src/formatter/FormatterSettings';
 import { MusicAccidental, MusicLetter, MusicNote } from '../src/models';
 
@@ -45,16 +45,14 @@ console.log(song);
 console.log(song.getPossibleKey()?.toString());
 console.log(cp.warnings);
 
-const settings = new BuilderSettingsBase();
+const settings = new FormatterSettings();
+settings.showMetadata = true;
+settings.showTabs = true;
 settings.useSimpleChord = false;
 settings.showChords = true;
 
-const formatterSettings = new FormatterSettings();
-formatterSettings.showMetadata = true;
-formatterSettings.showTabs = true;
-
-const htmlBuilder = new HtmlBuilder(settings);
-const formatter = new Formatter(htmlBuilder, formatterSettings);
+const formatter = new HtmlFormatter(settings);
+settings.showChords = false;
 const result = formatter.format(song);
 document.body.innerHTML = `${result.join("\n")}`
 //document.body.innerHTML = `<pre>${result.join('\n')}</pre>`;

@@ -1,14 +1,14 @@
 import { LyricsLine, CommentLine, TabLine, CustomLine } from "../../models/lines";
 import { Lyrics, Section, Tabs } from "../../models/sections";
 import { DataHelper } from "../DataHelper";
-import { BuilderSettingsBase } from "./BuilderSettingsBase";
+import { BuilderSettings } from "./BuilderSettings";
 import { IBuilder } from "./IBuilder";
 
 export class ChordProBuilder implements IBuilder {
-    private _settings: BuilderSettingsBase;
+    settings: BuilderSettings;
 
-    constructor(settings: BuilderSettingsBase = new BuilderSettingsBase()) {
-        this._settings = settings;
+    constructor(settings: BuilderSettings = new BuilderSettings()) {
+        this.settings = settings;
     }
 
     private buildMetadata(name: string, value: string | null): string {
@@ -93,12 +93,12 @@ export class ChordProBuilder implements IBuilder {
     lyricsLine(line: LyricsLine): string[] {
         let result = "";
         line.pairs.forEach((pair) => {
-            if (!this._settings.showChords) {
+            if (!this.settings.showChords) {
                 result += pair.lyrics;
                 return;
             }
             if (pair.chord) {
-                let chord = this._settings.useSimpleChord ? pair.chord.toSimpleString() : pair.chord.toString();
+                let chord = this.settings.useSimpleChord ? pair.chord.toSimpleString() : pair.chord.toString();
                 result += `[${chord}]${pair.lyrics}`;
             } else if (pair.text) {
                 result += `[*${pair.text}]${pair.lyrics}`;

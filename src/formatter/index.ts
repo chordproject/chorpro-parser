@@ -1,4 +1,4 @@
-export { Formatter } from "./Formatter";
-export { TextBuilder } from "./builders/TextBuilder";
-export { ChordProBuilder } from "./builders/ChordProBuilder";
-export { HtmlBuilder } from "./builders/HtmlBuilder";
+export { ChordProFormatter } from "./ChordProFormatter";
+export { HtmlFormatter } from "./HtmlFormatter";
+export { TextFormatter } from "./TextFormatter";
+export { FormatterSettings } from "./FormatterSettings";

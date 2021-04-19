@@ -1,28 +1,44 @@
-.lyrics {
-    white-space: pre;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+.lyrics-line {
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
 }
 
-.column {
-    float: left;
+.chord-lyrics {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
 }
 
-/* Clear floats after the columns */
-.row:after {
-    content: "";
-    display: table;
-    clear: both;
+.above-lyrics {
+    padding-right: 0.3em;
 }
 
 .chord {
-    height: 1em;
+    font-weight: bold;
+}
+
+.chord-lyrics:last-child .chord {
+    padding-right: 0;
+}
+
+.word {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    margin-right: 0.33em;
 }
 
 .empty-line {
-    height: 1em;
+    margin-top: 1.5em;
 }
 
 .chorus-section {
-    border-left: thick solid #5a3e3e;
-    padding-left: 5px;
+    font-weight: bold;
+    border-left: 2px black solid;
+    padding-left: 1em;
+}
+
+.tab-section {
+    font-family: monospace;
 }

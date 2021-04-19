@@ -26,6 +26,9 @@ export abstract class MusicNoteHelper {
      * @returns The semitones (positive value)
      */
     public static semiTonesBetween(firstNote: MusicNote, secondNote: MusicNote): number {
+        if (firstNote.equals(secondNote)) {
+            return 0;
+        }
         // get the value of each letter
         const firstLetterValue = this.notes.find((f) => f.letter == firstNote.letter)!.value;
         const secondLetterValue = this.notes.find((f) => f.letter == secondNote.letter)!.value;
@@ -46,6 +49,10 @@ export abstract class MusicNoteHelper {
      * @returns The difference (always a positive value)
      */
     public static letterDiff(firstLetter: MusicLetter, secondLetter: MusicLetter): number {
+        if (firstLetter == secondLetter) {
+            return 0;
+        }
+
         // get the index of each letter
         const firstLetterIndex = this.notes.find((f) => f.letter == firstLetter)!.index;
         const secondLetterIndex = this.notes.find((f) => f.letter == secondLetter)!.index;
@@ -62,6 +69,10 @@ export abstract class MusicNoteHelper {
      * @returns A new transposed note
      */
     public static transpose(note: MusicNote, letterDiff: number, semiTones: number): MusicNote {
+        if (letterDiff == 0 && semiTones == 0) {
+            return note;
+        }
+
         letterDiff = this.positiveMod(letterDiff, 7);
         semiTones = this.positiveMod(semiTones, 12);
 

@@ -1,7 +1,10 @@
 import { CommentLine, CustomLine, LyricsLine, TabLine } from "../../models/lines";
 import { Section } from "../../models/sections";
+import { BuilderSettings } from "./BuilderSettings";
 
 export interface IBuilder {
+    settings:BuilderSettings;
+
     titleMetadata(value: string): string[];
     subtitleMetadata(value: string): string[];
     artistsMetadata(values: string[]): string[];

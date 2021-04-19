@@ -39,6 +39,11 @@ export class ChordProParser {
      * parse the sheet
      */
     parse(sheet: string): Song {
+        if(!sheet.trim()){
+            this.addWarning("The song sheet is empty");
+            return new Song();
+        }
+        
         this._song.rawContent = sheet;
         const lines = sheet.split(/\r\n|\r|\n/);
 

@@ -1,10 +1,11 @@
 {
     "name": "chordproject-parser",
-    "version": "0.2.2",
+    "version": "0.2.4",
     "main": "dist/chordproject-parser.bundle.js",
     "typings": "dist/index",
     "files": [
-        "dist", "src/style.css"
+        "dist",
+        "src/style.css"
     ],
     "description": "A TypeScript library for parsing and formatting ChordPro songs.",
     "engines": {
@@ -38,8 +39,5 @@
         "webpack-cli": "^4.5.0",
         "webpack-dev-server": "^3.11.2"
     },
-    "dependencies": {
-        "@types/jquery": "^3.5.5",
-        "clone": "^2.1.2"
-    }
+    "dependencies": {}
 }

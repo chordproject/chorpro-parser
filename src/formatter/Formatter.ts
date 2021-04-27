@@ -1,5 +1,5 @@
 import { Song } from "../models";
-import { EmptyLine, LyricsLine, TabLine } from "../models/lines";
+import { CommentLine, EmptyLine, LyricsLine, TabLine } from "../models/lines";
 import { SectionType } from "../models/sections";
 import { IBuilder } from "./builders";
 import { FormatterSettingsBase } from "./FormatterSettingsBase";
@@ -32,6 +32,8 @@ export abstract class Formatter implements IFormatter {
                     this._lines.push(...this._builder.lyricsLine(line));
                 } else if (line instanceof TabLine) {
                     this._lines.push(...this._builder.tabLine(line));
+                } else if (line instanceof CommentLine) {
+                    this._lines.push(...this._builder.commentLine(line));
                 }
             });
 

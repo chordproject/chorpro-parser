@@ -1,7 +1,7 @@
 import { ChordProParser, Transposer } from '../src';
 import { ChordProFormatter, HtmlFormatter } from '../src/formatter';
 import { FormatterSettings } from '../src/formatter/FormatterSettings';
-import { MusicAccidental, MusicLetter, MusicNote } from '../src/models';
+import { MusicAccidental, MusicLetter, MusicNote } from '../src';
 
 ('use strict');
 
@@ -11,6 +11,7 @@ var chordSheet = `
 {artist: Paul Baloche}
 {key: Am}
 
+{c:Intro}
 {sot}
 E|-----2---2-----|-------3-3---
 B|---3---3---3---|-----0-------
@@ -55,5 +56,7 @@ const formatter = new HtmlFormatter(settings);
 settings.showChords = false;
 const result = formatter.format(song);
 document.body.innerHTML = `${result.join("\n")}`
+
+
 //document.body.innerHTML = `<pre>${result.join('\n')}</pre>`;
 //document.getElementById('demo')!.innerHTML = `<pre>${result.join('\n')}</pre>`;

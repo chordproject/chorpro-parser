@@ -147,7 +147,7 @@ test("format custom metadatas with value", () => {
 
 test("format empty line", () => {
     const result = _builder.emptyLine();
-    const expected = `<div class="row empty-line"></div>`;
+    const expected = `<div class="line empty-line"></div>`;
     expect(result).toEqual([expected]);
 });
 
@@ -155,7 +155,7 @@ test("format comment line", () => {
     const comment = "test";
     const commentLine = new CommentLine(comment);
     const result = _builder.commentLine(commentLine);
-    const expected = `<div class="row comment-line">${comment}</div>`;
+    const expected = `<div class="line comment-line">${comment}</div>`;
     expect(result).toEqual([expected]);
 });
 
@@ -225,6 +225,6 @@ test("format tab line", () => {
     const lineValue = "e|--1--|";
     const line = new TabLine(lineValue);
     const result = _builder.tabLine(line);
-    const expected = `<div class="row tab-line">${lineValue}</div>`;
+    const expected = `<div class="line tab-line">${lineValue}</div>`;
     expect(result).toEqual([expected]);
 });

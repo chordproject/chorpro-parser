@@ -136,7 +136,7 @@ export class HtmlBuilder implements IBuilder {
     }
 
     emptyLine(): string[] {
-        const classNames = ["row", "empty-line"];
+        const classNames = ["line", "empty-line"];
         return [this.buildHtmlElement("div", "", classNames)];
     }
 
@@ -247,12 +247,12 @@ export class HtmlBuilder implements IBuilder {
     }
 
     commentLine(line: CommentLine): string[] {
-        const classNames = ["row", "comment-line"];
+        const classNames = ["line", "comment-line"];
         return [this.buildHtmlElement("div", line.comment, classNames)];
     }
 
     tabLine(line: TabLine): string[] {
-        const classNames = ["row", "tab-line"];
+        const classNames = ["line", "tab-line"];
         return [this.buildHtmlElement("div", line.value, classNames)];
     }
 

@@ -1,12 +1,9 @@
 import { Chord, Key, ChordDiagram, MusicNote } from ".";
 import { IClonable } from "./IClonable";
 import { LyricsLine } from "./lines";
-import { LyricsBase, Section } from "./sections";
+import { LyricsBase, Section, SectionType } from "./sections";
+import { TimeSignature } from "./TimeSignature";
 
-export interface TimeSignature {
-    topNumber: number;
-    bottomNumber: number;
-}
 export class Song implements IClonable<Song> {
     /**
      * Title of the song
@@ -99,6 +96,29 @@ export class Song implements IClonable<Song> {
 
     sections: Section[] = [];
 
+    public getLyrics(): string[] {
+        let lyrics: string[] = [];
+        this.sections.forEach((section) => {
+            if (section instanceof LyricsBase) {
+                (<LyricsBase>section).lines.forEach((line) => {
+                    let lineLyrics = "";
+                    if (line instanceof LyricsLine) {
+                        (<LyricsLine>line).pairs.forEach((pair) => {
+                            if (pair.lyrics) {
+                                lineLyrics += pair.lyrics;
+                            }
+                        });
+                    }
+                    lineLyrics = lineLyrics.trim();
+                    if(lineLyrics){
+                        lyrics.push(lineLyrics);
+                    }
+                });
+            }
+        });
+        return lyrics;
+    }
+
     /**
      * Get the list of the song's chords
      * @returns All chords (in order)
@@ -107,11 +127,9 @@ export class Song implements IClonable<Song> {
         let chords: Chord[] = [];
         this.sections.forEach((section) => {
             if (section instanceof LyricsBase) {
-                const lyrics = <LyricsBase>section;
-                lyrics.lines.forEach((line) => {
+                (<LyricsBase>section).lines.forEach((line) => {
                     if (line instanceof LyricsLine) {
-                        const lyricsLine = <LyricsLine>line;
-                        lyricsLine.pairs.forEach((pair) => {
+                        (<LyricsLine>line).pairs.forEach((pair) => {
                             if (pair.hasChord()) {
                                 const chord = pair.chord!;
                                 chords.push(chord);
@@ -201,7 +219,7 @@ export class Song implements IClonable<Song> {
         clonedSong.title = this.title;
         clonedSong.year = this.year;
         if (this.time) {
-            clonedSong.time = { bottomNumber: this.time.bottomNumber, topNumber: this.time.topNumber };
+            clonedSong.time = new TimeSignature(this.time.bottomNumber,this.time.topNumber);
         }
         if (this.key) {
             clonedSong.key = this.key.clone();

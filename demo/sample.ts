@@ -9,6 +9,7 @@ var chordSheet = `
 {title: Praise Adonai}
 {subtitle: ChordProject Parser demo}
 {artist: Paul Baloche}
+{time: 4/4}
 {key: Am}
 
 {c:Intro}
@@ -42,9 +43,6 @@ All the [Dm7] Angels and the [F]Saints
 const cp = new ChordProParser();
 const song = cp.parse(chordSheet);
 const transposedSong = Transposer.transpose(song, new MusicNote(MusicLetter.D, MusicAccidental.bb));
-console.log(song);
-console.log(song.getPossibleKey()?.toString());
-console.log(cp.warnings);
 
 const settings = new FormatterSettings();
 settings.showMetadata = true;
@@ -57,6 +55,7 @@ settings.showChords = false;
 const result = formatter.format(song);
 document.body.innerHTML = `${result.join("\n")}`
 
-
+const timeString = song.time?.toString();
+console.log("Time: " + timeString);
 //document.body.innerHTML = `<pre>${result.join('\n')}</pre>`;
 //document.getElementById('demo')!.innerHTML = `<pre>${result.join('\n')}</pre>`;

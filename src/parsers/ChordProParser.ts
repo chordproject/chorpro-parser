@@ -1,5 +1,5 @@
 import { Line, LyricsLine, CommentLine, EmptyLine, CustomLine, TabLine } from "../models/lines";
-import { Key, ChordLyricsPair, ChordDiagram, Song, Chord } from "../models";
+import { Key, ChordLyricsPair, ChordDiagram, Song, Chord, TimeSignature } from "../models";
 import { Section, SectionType, Lyrics, LyricsBase, LyricsType, SimpleLyrics, Tabs } from "../models/sections";
 import { ParserWarning } from "./ParserWarning";
 import { Tag, TagType } from "./Tag";
@@ -436,7 +436,7 @@ export class ChordProParser {
 
         const top = parseInt(match.groups["top"]);
         const bottom = parseInt(match.groups["bottom"]);
-        this._song.time = { topNumber: top, bottomNumber: bottom };
+        this._song.time = new TimeSignature(top, bottom);
     }
 
     private parseCustomMetadataTag(name: string, value: string | null) {

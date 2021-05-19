@@ -2,14 +2,8 @@ import { Chord, Key, ChordDiagram, MusicNote } from ".";
 import { IClonable } from "./IClonable";
 import { LyricsLine } from "./lines";
 import { LyricsBase, Section, SectionType } from "./sections";
+import { TimeSignature } from "./TimeSignature";
 
-export class TimeSignature {
-    constructor(public topNumber: number, public bottomNumber: number) {}
-
-    toString(): string {
-        return `${this.topNumber}/${this.bottomNumber}`;
-    }
-}
 export class Song implements IClonable<Song> {
     /**
      * Title of the song
@@ -225,7 +219,7 @@ export class Song implements IClonable<Song> {
         clonedSong.title = this.title;
         clonedSong.year = this.year;
         if (this.time) {
-            clonedSong.time = { bottomNumber: this.time.bottomNumber, topNumber: this.time.topNumber };
+            clonedSong.time = new TimeSignature(this.time.bottomNumber,this.time.topNumber);
         }
         if (this.key) {
             clonedSong.key = this.key.clone();

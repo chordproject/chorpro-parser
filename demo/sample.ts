@@ -57,6 +57,7 @@ settings.showChords = false;
 const result = formatter.format(song);
 document.body.innerHTML = `${result.join("\n")}`
 
+console.log(song.getLyrics());
 
 //document.body.innerHTML = `<pre>${result.join('\n')}</pre>`;
 //document.getElementById('demo')!.innerHTML = `<pre>${result.join('\n')}</pre>`;

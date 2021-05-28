@@ -5,7 +5,7 @@ import { FormatterSettings } from "./FormatterSettings";
 export class HtmlFormatter extends Formatter {
     settings: FormatterSettings;
     constructor(settings:FormatterSettings = new FormatterSettings()) {
-        let builder = new HtmlBuilder()
+        let builder = new HtmlBuilder(settings)
         super(builder);
         this.settings = settings;
     }

@@ -12,6 +12,19 @@ var chordSheet = `
 {time: 4/4}
 {key: Am}
 
+[Am] [F] [C] [G] 
+
+{start_of_verse: Verse 1}
+Leave me [Am]out with the [F]waste,
+This is [C]not what I [G]do.
+It's the [Am]wrong kind of [F]place
+To be [C]thinking of [G]you.
+It's the [Am]wrong [F]time,
+For [C]somebody [G]new
+It's a small[Am] crime[F],
+And I've [C]got no excuse [G]
+{end_of_verse}
+
 {c:Intro}
 {sot}
 E|-----2---2-----|-------3-3---
@@ -48,11 +61,10 @@ const settings = new FormatterSettings();
 settings.showMetadata = true;
 settings.showTabs = true;
 settings.useSimpleChord = false;
-settings.showChords = true;
+settings.showChords = false;
 
 const formatter = new HtmlFormatter(settings);
-settings.showChords = false;
-const result = formatter.format(transposedSong);
+const result = formatter.format(song);
 document.body.innerHTML = `${result.join("\n")}`
 
 const timeString = song.time?.toString();

@@ -25,7 +25,7 @@ export abstract class Formatter implements IFormatter {
             }
 
             this._lines.push(...this._builder.sectionStart(section));
-            section.lines.forEach((line) => {
+            section.lines.forEach((line) => { // todo: remove unecessary empty lines at the top and the end
                 if (line instanceof EmptyLine) {
                     this._lines.push(...this._builder.emptyLine());
                 } else if (line instanceof LyricsLine) {

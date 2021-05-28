@@ -140,7 +140,15 @@ export class HtmlBuilder implements IBuilder {
         return [this.buildHtmlElement("div", "", classNames)];
     }
 
-    private createWordElement(...innerHtml:IPrintable[]): HtmlElement {
+    private createWordElement(...innerHtml: IPrintable[]): IPrintable {
+        if (
+            !innerHtml
+                .map((e) => e.toStringLines())
+                .join("")
+                .trim()
+        ) {
+            return new SimplePrintable(""); // avoid empty word
+        }
         let element = new HtmlElement("div", ["word"], ...innerHtml);
         return element;
     }
@@ -163,81 +171,95 @@ export class HtmlBuilder implements IBuilder {
         return element;
     }
 
-    private createChordLyricsElement(chord: string, isChord: boolean, lyrics: string): HtmlElement {
+    private createChordLyricsElement(chord: string, isChord: boolean, lyrics: string): IPrintable {
+        if (!this.settings.showChords && lyrics == "&nbsp;") {
+            return new SimplePrintable(""); // avoid empty element
+        }
+
         let element = new HtmlElement("div", ["chord-lyrics"]);
-        element.addElement(this.createChordElement(chord, isChord));
+        if (this.settings.showChords) {
+            element.addElement(this.createChordElement(chord, isChord));
+        }
         element.addElement(this.createLyricsElement(lyrics));
         return element;
     }
 
     lyricsLine(line: LyricsLine): string[] {
+        if (
+            !this.settings.showChords &&
+            !line.pairs
+                .map((p) => p.lyrics)
+                .join("")
+                .trim()
+        ) {
+            return [];
+        }
+
         let lineElement = new HtmlElement("div", ["lyrics-line"]);
-        let previousElements: HtmlElement[] = [];
+        let previousElements: IPrintable[] = [];
         line.pairs.forEach((pair, index) => {
-            if (this.settings.showChords) {
-                let hasTextAbove = pair.chord != null || pair.text != null;
-                let isChord = pair.chord != null;
-                let chordValue = "";
-                if (pair.chord) {
-                    chordValue = this.settings.useSimpleChord ? pair.chord.toSimpleString() : pair.chord.toString();
-                } else if (pair.text) {
-                    chordValue = pair.text;
+            let hasTextAbove = pair.chord != null || pair.text != null;
+            let isChord = pair.chord != null;
+            let chordValue = "";
+            if (pair.chord) {
+                chordValue = this.settings.useSimpleChord ? pair.chord.toSimpleString() : pair.chord.toString();
+            } else if (pair.text) {
+                chordValue = pair.text;
+            }
+
+            let lyrics = hasTextAbove ? pair.lyrics : pair.lyrics.trimStart();
+            lyrics = lyrics.replace(/ +/g, " ");
+            let words = lyrics.split(" ");
+            let firstWord = words.shift()!;
+            let lastWord = words.pop();
+
+            // first word is a space
+            if (firstWord == "") {
+                // means that the previous chord lyrics was a word
+                if (previousElements.length > 0) {
+                    let word = this.createWordElement(...previousElements);
+                    lineElement.addElement(word);
+                    previousElements = [];
                 }
-
-                let lyrics = hasTextAbove ? pair.lyrics : pair.lyrics.trimStart();
-                lyrics = lyrics.replace(/ +/g, " ");
-                let words = lyrics.split(" ");
-                let firstWord = words.shift()!;
-                let lastWord = words.pop();
-
-                // first word is a space
-                if (firstWord == "") {
-                    // means that the previous chord lyrics was a word
-                    if (previousElements.length > 0) {
-                        let word = this.createWordElement(...previousElements);
-                        lineElement.addElement(word);
-                        previousElements = [];
-                    }
-                    firstWord = "&nbsp;";
-                    if (words.length > 0) {
-                        firstWord += words.shift();
-                    }
+                firstWord = "&nbsp;";
+                if (words.length > 0) {
+                    firstWord += words.shift();
                 }
+            }
 
-                // create the first element
-                var firstElement = hasTextAbove
-                    ? this.createChordLyricsElement(chordValue, isChord, firstWord)
-                    : this.createLyricsElement(firstWord);
-                previousElements.push(firstElement);
+            // create the first element
+            var firstElement = hasTextAbove
+                ? this.createChordLyricsElement(chordValue, isChord, firstWord)
+                : this.createLyricsElement(firstWord);
+            previousElements.push(firstElement);
 
-                if (lastWord == undefined && index < line.pairs.length - 1) {
-                    return;
-                }
+            if (lastWord == undefined && index < line.pairs.length - 1) {
+                return;
+            }
 
-                // add the element as a word
-                let wordElement = this.createWordElement(...previousElements);
+            // add the element as a word
+            let wordElement = this.createWordElement(...previousElements);
+            lineElement.addElement(wordElement);
+            previousElements = [];
+
+            // for each other words
+            words.forEach((word) => {
+                let lyricsElement = this.createLyricsElement(word);
+                let wordElement = this.createWordElement(lyricsElement);
                 lineElement.addElement(wordElement);
-                previousElements = [];
+            });
 
-                // for each other words
-                words.forEach((word) => {
-                    let lyricsElement = this.createLyricsElement(word);
-                    let wordElement = this.createWordElement(lyricsElement);
-                    lineElement.addElement(wordElement);
-                });
-
-                // last word is not a space
-                if (lastWord != "" && lastWord != undefined) {
-                    previousElements.push(this.createLyricsElement(lastWord));
-                    if (index < line.pairs.length - 1) {
-                        return;
-                    }
+            // last word is not a space
+            if (lastWord != "" && lastWord != undefined) {
+                previousElements.push(this.createLyricsElement(lastWord));
+                if (index < line.pairs.length - 1) {
+                    return;
                 }
             }
         });
 
         // finish the line
-        if(previousElements.length > 0){
+        if (previousElements.length > 0) {
             let wordElement = this.createWordElement(...previousElements);
             lineElement.addElement(wordElement);
             previousElements = [];

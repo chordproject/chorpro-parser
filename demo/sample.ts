@@ -35,7 +35,7 @@ A|---------------|-2-----------
 E|---------------|-------------
 {eot}
 
-[Am]Who is like [Bb11]Him,
+[Am/C]Who is like [Bb11]Him,
 The Lion and the [C#m]Lamb
 Seated on the [Gm]throne    [E7]
 [Am]Mountains bow [F]down
@@ -55,7 +55,7 @@ All the [Dm7] Angels and the [F]Saints
 
 const cp = new ChordProParser();
 const song = cp.parse(chordSheet);
-const transposedSong = Transposer.transpose(song, new MusicNote(MusicLetter.D, MusicAccidental.bb));
+const transposedSong = Transposer.transpose(song, new MusicNote(MusicLetter.D));
 
 const settings = new FormatterSettings();
 settings.showMetadata = true;

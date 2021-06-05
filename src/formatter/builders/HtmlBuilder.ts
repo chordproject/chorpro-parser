@@ -171,7 +171,7 @@ export class HtmlBuilder implements IBuilder {
         return element;
     }
 
-    private createChordLyricsElement(chord: string, isChord: boolean, lyrics: string): IPrintable {
+    private createChordLyricsElement(chord: string, isChord: boolean, lyrics: string | undefined): IPrintable {
         if (!this.settings.showChords && lyrics == "&nbsp;") {
             return new SimplePrintable(""); // avoid empty element
         }
@@ -180,18 +180,18 @@ export class HtmlBuilder implements IBuilder {
         if (this.settings.showChords) {
             element.addElement(this.createChordElement(chord, isChord));
         }
-        element.addElement(this.createLyricsElement(lyrics));
+        if (lyrics) {
+            element.addElement(this.createLyricsElement(lyrics));
+        }
         return element;
     }
 
     lyricsLine(line: LyricsLine): string[] {
-        if (
-            !this.settings.showChords &&
-            !line.pairs
-                .map((p) => p.lyrics)
-                .join("")
-                .trim()
-        ) {
+        let haslyrics = line.pairs
+            .map((p) => p.lyrics)
+            .join("")
+            .trim();
+        if (!this.settings.showChords && !haslyrics) {
             return [];
         }
 
@@ -210,7 +210,7 @@ export class HtmlBuilder implements IBuilder {
             let lyrics = hasTextAbove ? pair.lyrics : pair.lyrics.trimStart();
             lyrics = lyrics.replace(/ +/g, " ");
             let words = lyrics.split(" ");
-            let firstWord = words.shift()!;
+            let firstWord = words.shift();
             let lastWord = words.pop();
 
             // first word is a space
@@ -227,10 +227,13 @@ export class HtmlBuilder implements IBuilder {
                 }
             }
 
+            if (!haslyrics) {
+                firstWord = undefined;
+            }
             // create the first element
             var firstElement = hasTextAbove
                 ? this.createChordLyricsElement(chordValue, isChord, firstWord)
-                : this.createLyricsElement(firstWord);
+                : this.createLyricsElement(firstWord!);
             previousElements.push(firstElement);
 
             if (lastWord == undefined && index < line.pairs.length - 1) {

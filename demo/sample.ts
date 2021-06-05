@@ -1,9 +1,9 @@
-import { ChordProParser, Transposer } from '../src';
-import { ChordProFormatter, HtmlFormatter } from '../src/formatter';
-import { FormatterSettings } from '../src/formatter/FormatterSettings';
-import { MusicAccidental, MusicLetter, MusicNote } from '../src';
+import { ChordProParser, Transposer } from "../src";
+import { ChordProFormatter, HtmlFormatter } from "../src/formatter";
+import { FormatterSettings } from "../src/formatter/FormatterSettings";
+import { MusicAccidental, MusicLetter, MusicNote } from "../src";
 
-('use strict');
+("use strict");
 
 var chordSheet = `
 {title: Praise Adonai}
@@ -12,6 +12,7 @@ var chordSheet = `
 {time: 4/4}
 {key: Am}
 
+[Am] [F] [C] [G]
 [Am] [F] [C] [G] 
 
 {start_of_verse: Verse 1}
@@ -61,11 +62,11 @@ const settings = new FormatterSettings();
 settings.showMetadata = true;
 settings.showTabs = true;
 settings.useSimpleChord = false;
-settings.showChords = false;
+settings.showChords = true;
 
 const formatter = new HtmlFormatter(settings);
 const result = formatter.format(song);
-document.body.innerHTML = `${result.join("\n")}`
+document.body.innerHTML = `${result.join("\n")}`;
 
 const timeString = song.time?.toString();
 console.log("Time: " + timeString);

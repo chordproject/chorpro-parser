@@ -56,7 +56,7 @@ All the [Dm7] Angels and the [F]Saints
 
 const cp = new ChordProParser();
 const song = cp.parse(chordSheet);
-const transposedSong = Transposer.transpose(song, new MusicNote(MusicLetter.D));
+const transposedSong = Transposer.transpose(song, new MusicNote(MusicLetter.A, MusicAccidental["#"]));
 
 const settings = new FormatterSettings();
 settings.showMetadata = true;
@@ -65,7 +65,7 @@ settings.useSimpleChord = false;
 settings.showChords = true;
 
 const formatter = new HtmlFormatter(settings);
-const result = formatter.format(song);
+const result = formatter.format(transposedSong);
 document.body.innerHTML = `${result.join("\n")}`;
 
 const timeString = song.time?.toString();

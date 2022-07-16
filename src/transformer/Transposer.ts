@@ -22,6 +22,7 @@ export abstract class Transposer {
                 if (line instanceof LyricsLine) {
                     line.pairs.forEach((pair, pairIndex) => {
                         if (pair.chord) {
+                            console.log(pair.chord.toString());
                             const note = MusicNoteHelper.transpose(pair.chord.key.note, letterDiff, semiTones);
                             const newChord = pair.chord;
                             newChord.key.note = note;
@@ -31,6 +32,7 @@ export abstract class Transposer {
                             }
 
                             (<LyricsLine>newSong.sections[sectionIndex].lines[lineIndex]).pairs[pairIndex].chord = newChord;
+                            console.log("New chord: " + newChord.toString());
                         }
                     });
                 }

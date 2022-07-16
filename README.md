@@ -4,15 +4,10 @@ A TypeScript library for parsing, transposing and formatting ChordPro songs.
 
 ## Overview
 
-Parse any ChordPro song by using the ChordProParser.
-This gives a Song object wich can the be transposed with the Transposer and formatted with the Formatter.
-The formatter comes with 3 builders:
+Parse any ChordPro song by using the **ChordProParser**.
+This gives back a *Song* object that can then be transposed with the **Transposer** or formatted with the **ChordProFormatter**.
 
--   TextBuilder: format as text
--   HtmlBuilder: format as HTML (cf. style.css)
--   ChordProBuilder: format as ChordPro
-
-#### Part of [ChordProject](https://gochord.com/)
+**Part of [ChordProject](https://chordproject.com/)**
 
 ## Usage
 
@@ -38,18 +33,23 @@ To use the ChordProParser:
 const parser = new ChordProParser();
 const song = parser.parse(chordSheet);
 ```
+*chordSheet* is a string variable that contains the raw ChordPro song.
 
 ### Formatter
 
-You can choose between 3 formatters: TextFormatter, HtmlFormatter and ChordProFormatter.
+You can choose between 3 formatters: 
+- **TextFormatter**: output the song as text
+- **HtmlFormatter**: output the song as HTML
+- **ChordProFormatter**: output the song as a "cleaned" ChordPro
 
 ```typescript
 const formatter = new HtmlFormatter();
 const songText = formatter.format(song);
 ```
 
-The formatters have default settings. You can change pass the settings in the formatter's constructor or change the settings later.
-Here is an example:
+The formatters have default settings.
+
+You can pass the settings in the formatter's constructor...
 
 ```typescript
 const settings = new FormatterSettings();
@@ -57,10 +57,10 @@ settings.showChords = false;
 const formatter = new HtmlFormatter(settings);
 ```
 
-or simply
+...or directly change the settings after the initialization
 
 ```typescript
-const formatter = new HtmlFormatter(settings);
+const formatter = new HtmlFormatter();
 formatter.settings.showChords = false;
 ```
 
@@ -124,3 +124,11 @@ or for the coverage
 ```sh
 $ npm run test:ci
 ```
+## Contributing
+
+This project welcomes contributions of all types. If you find any bug or want some new features, please feel free to create an issue or submit a pull request.
+
+Join the community and chat with us on **[Discord](https://discord.gg/ZQAgwBC9c8)**
+
+## License
+[MIT License](LICENSE)

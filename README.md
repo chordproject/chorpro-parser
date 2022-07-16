@@ -124,7 +124,6 @@ or for the coverage
 ```sh
 $ npm run test:ci
 ```
-
 ## Contributing
 
 This project welcomes contributions of all types. If you find any bug or want some new features, please feel free to create an issue or submit a pull request.

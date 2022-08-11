@@ -103,10 +103,6 @@ export abstract class MusicNoteHelper {
         return new MusicNote(newNoteValues.letter, newAccidental);
     }
 
-    private static positiveMod(value: number, mod: number) {
-        return ((value % mod) + mod) % mod;
-    }
-
     private static getNormalizeNumber(number: number, min: number, max: number, amount: number): number {
         if (number < min) {
             number = number + amount;

@@ -2,13 +2,13 @@ import { MusicAccidental, MusicLetter, MusicNote } from "../models";
 
 export abstract class MusicNoteHelper {
     private static notes: { letter: MusicLetter; index: number; value: number }[] = [
-        { letter: MusicLetter.A, index: 0, value: 0 },
-        { letter: MusicLetter.B, index: 1, value: 2 },
-        { letter: MusicLetter.C, index: 2, value: 3 },
-        { letter: MusicLetter.D, index: 3, value: 5 },
-        { letter: MusicLetter.E, index: 4, value: 7 },
-        { letter: MusicLetter.F, index: 5, value: 8 },
-        { letter: MusicLetter.G, index: 6, value: 10 },
+        { letter: MusicLetter.A, index: 0, value: 1 },
+        { letter: MusicLetter.B, index: 1, value: 3 },
+        { letter: MusicLetter.C, index: 2, value: 4 },
+        { letter: MusicLetter.D, index: 3, value: 6 },
+        { letter: MusicLetter.E, index: 4, value: 8 },
+        { letter: MusicLetter.F, index: 5, value: 9 },
+        { letter: MusicLetter.G, index: 6, value: 11 },
     ];
 
     private static accidentals: { accidental: MusicAccidental; value: number }[] = [
@@ -38,8 +38,8 @@ export abstract class MusicNoteHelper {
         const secondAccidentalValue = this.accidentals.find((f) => f.accidental == secondNote.accidental)!.value;
 
         // calculate the semi-tones diff
-        const diff = secondLetterValue + secondAccidentalValue - (firstLetterValue + firstAccidentalValue);
-        return this.positiveMod(diff, 12);
+        let diff = secondLetterValue + secondAccidentalValue - (firstLetterValue + firstAccidentalValue);
+        return this.getNormalizeNumber(diff, 0, 12, 12);
     }
 
     /**
@@ -58,7 +58,8 @@ export abstract class MusicNoteHelper {
         const secondLetterIndex = this.notes.find((f) => f.letter == secondLetter)!.index;
 
         // calculate the letter diff
-        return this.positiveMod(secondLetterIndex - firstLetterIndex, 7);
+        let diff = secondLetterIndex - firstLetterIndex;
+        return this.getNormalizeNumber(diff, 0, 6, 7);
     }
 
     /**
@@ -73,32 +74,29 @@ export abstract class MusicNoteHelper {
             return note;
         }
 
-        letterDiff = this.positiveMod(letterDiff, 7);
-        semiTones = this.positiveMod(semiTones, 12);
+        letterDiff = this.getNormalizeNumber(letterDiff, 0, 6, 7);
+        semiTones = this.getNormalizeNumber(semiTones, 0, 12, 12);
 
         // get the note values
         const noteValues = this.notes.find((f) => f.letter == note.letter)!;
 
         // get the new letter values
-        let newNoteIndex = (noteValues.index + letterDiff) % 7;
+        let newNoteIndex = this.getNormalizeNumber(noteValues.index + letterDiff, 0, 6, 7);
         let newNoteValues = this.notes[newNoteIndex];
 
         // calculate the semitones between the note and the transposed note
         let newSemiTones = this.semiTonesBetween(note, new MusicNote(newNoteValues.letter));
-        let semiTonesDiff = semiTones - newSemiTones;
+        let semiTonesDiff = this.getNormalizeNumber(semiTones - newSemiTones, -3, 3, 12);
 
         // check if the semitones are not greater than 2 (3# or 3b)
         // in this case, we will replace the letter by the one below (or above)
         // we will not use triple # or b
         if (Math.abs(semiTonesDiff) > 2) {
-            if (semiTonesDiff < 0) {
-                newNoteIndex = this.positiveMod(--newNoteIndex, 7);
-            } else {
-                newNoteIndex = this.positiveMod(++newNoteIndex, 7);
-            }
+            semiTonesDiff < 0 ? --newNoteIndex : ++newNoteIndex;
+            newNoteIndex = this.getNormalizeNumber(newNoteIndex, 0, 6, 7);
             newNoteValues = this.notes[newNoteIndex];
             newSemiTones = this.semiTonesBetween(note, new MusicNote(newNoteValues.letter));
-            semiTonesDiff = semiTones - newSemiTones;
+            semiTonesDiff = this.getNormalizeNumber(semiTones - newSemiTones, -3, 3, 12);
         }
 
         const newAccidental = this.accidentals.find((f) => f.value == semiTonesDiff)!.accidental;
@@ -107,5 +105,15 @@ export abstract class MusicNoteHelper {
 
     private static positiveMod(value: number, mod: number) {
         return ((value % mod) + mod) % mod;
+    }
+
+    private static getNormalizeNumber(number: number, min: number, max: number, amount: number): number {
+        if (number < min) {
+            number = number + amount;
+        }
+        else if (number > max) {
+            number = number - amount;
+        }
+        return number;
     }
 }

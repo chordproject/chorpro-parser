@@ -131,4 +131,4 @@ This project welcomes contributions of all types. If you find any bug or want so
 Join the community and chat with us on **[Discord](https://discord.gg/ZQAgwBC9c8)**
 
 ## License
-[MIT License](LICENSE)
+[GNU License](LICENSE)

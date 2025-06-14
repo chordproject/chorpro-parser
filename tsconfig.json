@@ -1,20 +1,25 @@
 {
     "compilerOptions": {
+        "target": "ES2022", // Usa un target más reciente
+        "module": "ESNext", // Mantén ESNext para módulos modernos
         "outDir": "./dist",
-        "target": "ES6",
+        "rootDir": "./src", // Define explícitamente el directorio raíz
+        "strict": true, // Activa todas las comprobaciones estrictas
+        "esModuleInterop": true, // Facilita la interoperabilidad con CommonJS
+        "forceConsistentCasingInFileNames": true, // Evita problemas de mayúsculas/minúsculas
+        "skipLibCheck": true, // Mejora el rendimiento al ignorar comprobaciones de tipos en archivos de definición
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "declaration": true,
+        "declarationMap": true, // Genera mapas para declaraciones
+        "sourceMap": true,
         "allowSyntheticDefaultImports": true,
         "noImplicitAny": true,
         "removeComments": true,
         "preserveConstEnums": true,
-        "sourceMap": true,
-        "strictNullChecks": true,
-        "strict": true,
         "allowJs": false,
-        "moduleResolution": "node",
-        "resolveJsonModule": true,
-        "module": "ESNext",
-        "declaration": true
+        "useDefineForClassFields": true // Comportamiento moderno para campos de clase
     },
-    "include": ["./src/**/*"],
-    "exclude": ["node_modules", "**/*.spec.ts"]
+    "include": ["./src"],
+    "exclude": ["node_modules", "**/*.spec.ts", "./dist"]
 }

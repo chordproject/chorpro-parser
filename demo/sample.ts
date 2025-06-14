@@ -1,7 +1,6 @@
 import { ChordProParser, Transposer } from "../src";
-import { ChordProFormatter, HtmlFormatter } from "../src/formatter";
+import { HtmlFormatter } from "../src/formatter";
 import { FormatterSettings } from "../src/formatter/FormatterSettings";
-import { MusicAccidental, MusicLetter, MusicNote } from "../src";
 
 ("use strict");
 
@@ -56,7 +55,7 @@ All the [Dm7] Angels and the [F]Saints
 
 const cp = new ChordProParser();
 const song = cp.parse(chordSheet);
-const transposedSong = Transposer.transpose(song, new MusicNote(MusicLetter.A, MusicAccidental["#"]));
+const transposedSong = Transposer.transpose(song, "up");
 
 const settings = new FormatterSettings();
 settings.showMetadata = true;

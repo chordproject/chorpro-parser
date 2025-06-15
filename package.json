@@ -1,10 +1,11 @@
 {
     "name": "chordproject-parser",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "main": "dist/chordproject-parser.bundle.js",
-    "typings": "dist/index",
+    "typings": "types/index.d.ts",
     "files": [
         "dist",
+        "types",
         "src/style.css"
     ],
     "description": "A TypeScript library for parsing and formatting ChordPro songs.",
@@ -20,7 +21,7 @@
     ],
     "scripts": {
         "start": "webpack serve --config webpack.dev.js",
-        "build": "webpack --config webpack.prod.js",
+        "build": "rimraf types && tsc && webpack --config webpack.prod.js",
         "release": "npm run build && npm publish",
         "test": "npx jest --runInBand --detectOpenHandles --colors --verbose --reporters=default",
         "test:ci": "npx jest --ci --runInBand --silent --colors --coverage"
@@ -30,6 +31,7 @@
         "@types/node": "^24.0.1",
         "html-webpack-plugin": "^5.6.3",
         "jest": "^30.0.0",
+        "rimraf": "^6.0.1",
         "ts-jest": "^29.4.0",
         "ts-loader": "^9.5.2",
         "typescript": "^5.8.3",

@@ -11,7 +11,8 @@
         "moduleResolution": "node",
         "resolveJsonModule": true,
         "declaration": true,
-        "declarationMap": true, // Genera mapas para declaraciones
+        "declarationDir": "types",
+        "emitDeclarationOnly": false,
         "sourceMap": true,
         "allowSyntheticDefaultImports": true,
         "noImplicitAny": true,
@@ -20,11 +21,15 @@
         "allowJs": false,
         "useDefineForClassFields": true // Comportamiento moderno para campos de clase
     },
-    "include": ["./src"],
+    "include": [
+        "src/**/*"
+    ],
     "exclude": [
         "node_modules",
-        "**/*.spec.ts",
         "./dist",
-        "demo/**/*" // Excluye el directorio demo
+        "demo/**/*",
+        "**/*.spec.ts",
+        "**/*.test.ts",
+        "**/tests/**"
     ]
 }

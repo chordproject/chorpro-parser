@@ -62,3 +62,14 @@ body {
     border-left: 2px black solid;
     padding-left: 1em;
 }
+
+button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+#demo {
+    margin-top: 20px;
+}

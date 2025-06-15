@@ -1,4 +1,4 @@
-import { MusicNote, MusicLetter } from "../models/MusicNote";
+import { MusicNote, MusicLetter, MusicAccidental } from "../models/MusicNote";
 import { Song } from "../models";
 import { LyricsLine } from "../models/lines";
 import { SectionType } from "../models/sections";
@@ -12,48 +12,88 @@ export abstract class Transposer {
             return song;
         }
 
-        const currentKeyLetter = songKey.note.letter.toString();
-        const steps = direction === "up" ? 1 : -1;
+        const currentKeyNote = songKey.note;
+        const currentKeyLetterStr = MusicLetter[currentKeyNote.letter];
+        const currentKeyAccidentalStr = MusicAccidental[currentKeyNote.accidental];
+        const currentKeyNoteStr =
+            currentKeyLetterStr + (currentKeyAccidentalStr === "none" ? "" : currentKeyAccidentalStr);
 
-        // Calcular la nueva clave
-        const newKeyLetter = MusicTheoryHelper.getNextInCircle(currentKeyLetter, steps);
-        const newKey = new MusicNote(MusicLetter[newKeyLetter as keyof typeof MusicLetter], songKey.note.accidental);
+        // Determine amount to transpose
+        const semitones = direction === "up" ? 1 : -1;
 
-        const letterDiff = MusicTheoryHelper.letterDiff(currentKeyLetter, newKeyLetter);
-        const semiTones = MusicTheoryHelper.semiTonesBetween(currentKeyLetter, newKeyLetter);
-        songKey.note = newKey;
+        // Calculate the new key
+        const currentPitchClass = MusicTheoryHelper.pitchClassMap[currentKeyNoteStr];
+        if (currentPitchClass === undefined) {
+            return song; // If the key is not recognized, return the original song
+        }
 
-        newSong.sections.forEach((section, sectionIndex) => {
+        const newPitchClass = (currentPitchClass + semitones + 12) % 12;
+        // Use getPreferredEnharmonic instead of directly using reversePitchClassMap
+        const newKeyNoteStr = MusicTheoryHelper.getPreferredEnharmonic(
+            MusicTheoryHelper.reversePitchClassMap[newPitchClass],
+            currentKeyNoteStr // Pass the original key as context
+        );
+
+        // Parse the new key note
+        const newKeyNote = MusicNote.parse(newKeyNoteStr);
+        if (!newKeyNote) {
+            return song; // If the new key can't be parsed, return the original song
+        }
+
+        // Set the new key while preserving the mode
+        songKey.note = newKeyNote;
+
+        // Transpose all chords in the song
+        newSong.sections.forEach((section) => {
             if (section.sectionType != SectionType.Lyrics) {
                 return;
             }
-            section.lines.forEach((line, lineIndex) => {
+            section.lines.forEach((line) => {
                 if (line instanceof LyricsLine) {
-                    line.pairs.forEach((pair, pairIndex) => {
+                    line.pairs.forEach((pair) => {
                         if (pair.chord) {
-                            const chordKeyLetter = pair.chord.key.note.letter.toString();
-                            const transposedNote = MusicTheoryHelper.transposeKey(
-                                chordKeyLetter,
-                                letterDiff,
-                                semiTones
-                            );
-                            const newChord = pair.chord;
-                            newChord.key.note.letter = MusicLetter[transposedNote as keyof typeof MusicLetter];
+                            // Transpose chord key
+                            const chordKeyNote = pair.chord.key.note;
+                            const chordLetterStr = MusicLetter[chordKeyNote.letter];
+                            const chordAccidentalStr = MusicAccidental[chordKeyNote.accidental];
+                            const chordNoteStr =
+                                chordLetterStr + (chordAccidentalStr === "none" ? "" : chordAccidentalStr);
 
-                            if (pair.chord.bass) {
-                                const bassKeyLetter = pair.chord.bass.letter.toString();
-                                const transposedBassNote = MusicTheoryHelper.transposeKey(
-                                    bassKeyLetter,
-                                    letterDiff,
-                                    semiTones
+                            const chordPitchClass = MusicTheoryHelper.pitchClassMap[chordNoteStr];
+                            if (chordPitchClass !== undefined) {
+                                const newChordPitchClass = (chordPitchClass + semitones + 12) % 12;
+                                const newChordNoteStr = MusicTheoryHelper.getPreferredEnharmonic(
+                                    MusicTheoryHelper.reversePitchClassMap[newChordPitchClass],
+                                    newKeyNoteStr // Use the new key as context
                                 );
-                                if (newChord.bass) {
-                                    newChord.bass.letter = MusicLetter[transposedBassNote as keyof typeof MusicLetter];
+
+                                const newChordNote = MusicNote.parse(newChordNoteStr);
+                                if (newChordNote) {
+                                    pair.chord.key.note = newChordNote;
                                 }
                             }
 
-                            (<LyricsLine>newSong.sections[sectionIndex].lines[lineIndex]).pairs[pairIndex].chord =
-                                newChord;
+                            // Transpose bass note if present
+                            if (pair.chord.bass) {
+                                const bassLetterStr = MusicLetter[pair.chord.bass.letter];
+                                const bassAccidentalStr = MusicAccidental[pair.chord.bass.accidental];
+                                const bassNoteStr =
+                                    bassLetterStr + (bassAccidentalStr === "none" ? "" : bassAccidentalStr);
+
+                                const bassPitchClass = MusicTheoryHelper.pitchClassMap[bassNoteStr];
+                                if (bassPitchClass !== undefined) {
+                                    const newBassPitchClass = (bassPitchClass + semitones + 12) % 12;
+                                    const newBassNoteStr = MusicTheoryHelper.getPreferredEnharmonic(
+                                        MusicTheoryHelper.reversePitchClassMap[newBassPitchClass],
+                                        newKeyNoteStr // Use the new key as context
+                                    );
+
+                                    const newBassNote = MusicNote.parse(newBassNoteStr);
+                                    if (newBassNote) {
+                                        pair.chord.bass = newBassNote;
+                                    }
+                                }
+                            }
                         }
                     });
                 }

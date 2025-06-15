@@ -15,17 +15,22 @@ export abstract class Formatter implements IFormatter {
     }
 
     format(song: Song): string[] {
+        this._lines = []; // Clear previous lines
+
         if (this.settings.showMetadata) {
             this.formatMetadata(song);
         }
+
+        // Wrap the entire song content in a single song-content div
         this._lines.push(...this._builder.contentStart());
+
         song.sections.forEach((section) => {
             if (!this.settings.showTabs && section.sectionType == SectionType.Tabs) {
                 return;
             }
 
             this._lines.push(...this._builder.sectionStart(section));
-            section.lines.forEach((line) => { // todo: remove unecessary empty lines at the top and the end
+            section.lines.forEach((line) => {
                 if (line instanceof EmptyLine) {
                     this._lines.push(...this._builder.emptyLine());
                 } else if (line instanceof LyricsLine) {
@@ -36,10 +41,10 @@ export abstract class Formatter implements IFormatter {
                     this._lines.push(...this._builder.commentLine(line));
                 }
             });
-
             this._lines.push(...this._builder.sectionEnd(section));
         });
-        this._lines.push(...this._builder.contentEnd());
+
+        this._lines.push(...this._builder.contentEnd()); // Close the song-content div
         return this._lines;
     }
 

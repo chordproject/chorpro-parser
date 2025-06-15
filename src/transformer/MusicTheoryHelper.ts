@@ -104,4 +104,26 @@ export class MusicTheoryHelper {
 
         return index2 - index1;
     }
+
+    static getPreferredEnharmonic(noteStr: string, keyContext?: string): string {
+        const pitchClass = this.pitchClassMap[noteStr];
+        if (pitchClass === undefined) {
+            return noteStr;
+        }
+
+        // Default enharmonic preferences based on musical theory
+        // Generally prefer sharps for ascending, flats for descending
+        const sharpPreferred = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+        const flatPreferred = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"];
+
+        // Prefer enharmonics that match the current key signature
+        if (keyContext && keyContext.includes("#")) {
+            return sharpPreferred[pitchClass];
+        } else if (keyContext && keyContext.includes("b")) {
+            return flatPreferred[pitchClass];
+        }
+
+        // Default to the standard mapping
+        return this.reversePitchClassMap[pitchClass];
+    }
 }

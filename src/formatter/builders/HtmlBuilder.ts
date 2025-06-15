@@ -334,11 +334,13 @@ export class HtmlBuilder implements IBuilder {
     }
 
     contentStart(): string[] {
+        // Ensure this method is only called once for the entire song content
         const classNames = ["song-content"];
-        return [`<div class=${classNames.join(" ")}>`];
+        return [`<div class="${classNames.join(" ")}">`];
     }
 
     contentEnd(): string[] {
+        // Ensure this method is only called once for the entire song content
         return [`</div>`];
     }
 }

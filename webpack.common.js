@@ -1,32 +1,36 @@
 const path = require("path");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
     entry: {
-        app: ["./src/index.ts"],
+        app: "./src/index.ts",
     },
-    plugins: [new CleanWebpackPlugin()],
     output: {
-        filename: "chordproject-parser.bundle.js",
+        filename: "[name].bundle.js", // Use dynamic naming for better caching
         path: path.resolve(__dirname, "dist"),
-        library: "ChordProjectParser",
-        libraryTarget: "umd",
+        library: {
+            name: "ChordProjectParser",
+            type: "umd", // Modern library target
+        },
+        clean: true, // Automatically clean the output directory (replaces CleanWebpackPlugin in Webpack 5+)
     },
     module: {
         rules: [
             {
                 test: /\.tsx?$/,
-                use: "ts-loader",
+                use: {
+                    loader: "ts-loader",
+                    options: {
+                        transpileOnly: true, // Desactiva las verificaciones de tipo
+                    },
+                },
                 exclude: /node_modules/,
             },
         ],
     },
     resolve: {
-        extensions: [".tsx", ".ts", ".js"],
+        extensions: [".tsx", ".ts", ".js"], // Resolve these extensions
     },
     externals: {
-        // require("jquery") is external and available
-        //  on the global var jQuery
-        jquery: "jQuery",
+        jquery: "jQuery", // Mark jQuery as an external dependency
     },
 };

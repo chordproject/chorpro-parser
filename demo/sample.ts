@@ -1,5 +1,6 @@
 import { ChordProParser, Transposer } from "../src";
 import { HtmlFormatter } from "../src/formatter";
+import { HtmlBuilder } from "../src/formatter/builders";
 import { FormatterSettings } from "../src/formatter/FormatterSettings";
 
 ("use strict");
@@ -55,7 +56,6 @@ All the [Dm7] Angels and the [F]Saints
 
 const cp = new ChordProParser();
 const song = cp.parse(chordSheet);
-const transposedSong = Transposer.transpose(song, "up");
 
 const settings = new FormatterSettings();
 settings.showMetadata = true;
@@ -63,9 +63,30 @@ settings.showTabs = true;
 settings.useSimpleChord = false;
 settings.showChords = true;
 
-const formatter = new HtmlFormatter(settings);
-const result = formatter.format(transposedSong);
-document.body.innerHTML = `${result.join("\n")}`;
+const builder = new HtmlBuilder();
+const formatter = new HtmlFormatter(builder, settings);
+let currentSong = song; // Maintain the current state of the song
+
+const renderSong = (song: any) => {
+    const demoElement = document.getElementById("demo")!;
+    demoElement.innerHTML = ""; // Clear the entire container
+    const result = formatter.format(song);
+    demoElement.innerHTML = result.join("\n"); // Replace content directly
+};
+
+// Ensure event listeners are added only once
+document.getElementById("transpose-up")!.addEventListener("click", () => {
+    currentSong = Transposer.transpose(currentSong, "up"); // Transpose the current state
+    renderSong(currentSong);
+});
+
+document.getElementById("transpose-down")!.addEventListener("click", () => {
+    currentSong = Transposer.transpose(currentSong, "down"); // Transpose the current state
+    renderSong(currentSong);
+});
+
+// Initial render
+renderSong(currentSong);
 
 const timeString = song.time?.toString();
 console.log("Time: " + timeString);

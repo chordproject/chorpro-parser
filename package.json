@@ -1,6 +1,6 @@
 {
     "name": "chordproject-parser",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "main": "dist/chordproject-parser.bundle.js",
     "typings": "types/index.d.ts",
     "files": [

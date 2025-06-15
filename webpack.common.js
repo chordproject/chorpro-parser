@@ -5,7 +5,7 @@ module.exports = {
         app: "./src/index.ts",
     },
     output: {
-        filename: "[name].bundle.js", // Use dynamic naming for better caching
+        filename: "chordproject-parser.bundle.js", // Use dynamic naming for better caching
         path: path.resolve(__dirname, "dist"),
         library: {
             name: "ChordProjectParser",

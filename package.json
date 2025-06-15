@@ -1,6 +1,6 @@
 {
     "name": "chordproject-parser",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "main": "dist/chordproject-parser.bundle.js",
     "typings": "types/index.d.ts",
     "files": [
@@ -9,9 +9,6 @@
         "src/style.css"
     ],
     "description": "A TypeScript library for parsing and formatting ChordPro songs.",
-    "engines": {
-        "node": ">=4.2.4"
-    },
     "keywords": [
         "chordpro",
         "chordproject",

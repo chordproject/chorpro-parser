@@ -58,13 +58,13 @@ const cp = new ChordProParser();
 const song = cp.parse(chordSheet);
 
 const settings = new FormatterSettings();
+
 settings.showMetadata = true;
 settings.showTabs = true;
 settings.useSimpleChord = false;
 settings.showChords = true;
 
-const builder = new HtmlBuilder();
-const formatter = new HtmlFormatter(builder, settings);
+const formatter = new HtmlFormatter(settings);
 let currentSong = song; // Maintain the current state of the song
 
 const renderSong = (song: any) => {
@@ -90,5 +90,3 @@ renderSong(currentSong);
 
 const timeString = song.time?.toString();
 console.log("Time: " + timeString);
-//document.body.innerHTML = `<pre>${result.join('\n')}</pre>`;
-//document.getElementById('demo')!.innerHTML = `<pre>${result.join('\n')}</pre>`;
